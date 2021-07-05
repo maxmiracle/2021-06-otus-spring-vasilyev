@@ -19,6 +19,7 @@ public class QuestionReader {
         try (var reader = csvDataProvider.getReader()) {
 
             CsvToBean<Question> csvToBean = new CsvToBeanBuilder<Question>(reader)
+                    .withType(Question.class)
                     .withSeparator(';')
                     .build();
            return csvToBean.parse();
