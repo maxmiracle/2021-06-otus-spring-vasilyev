@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="csvDataProvider" class="org.maxvas.service.CsvDataProvider">
+        <constructor-arg name="resourcePath" value="/questions.csv"/>
+    </bean>
+    <bean id="printQuestionService" class="org.maxvas.service.PrintQuestionsService">
+        <constructor-arg name="questionReader" ref="questionReader"/>
+    </bean>
+    <bean id="questionReader" class="org.maxvas.service.QuestionReader">
+        <constructor-arg name="csvDataProvider" ref="csvDataProvider"/>
+    </bean>
+
+</beans>

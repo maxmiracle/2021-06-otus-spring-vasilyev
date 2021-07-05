@@ -1,0 +1,6 @@
+number;question;answerType;options
+1;What is your name?;String;
+2;How old are you?;Integer;
+3;What is your gender?;Options;Male,Female
+4;How many meters in one kilometer?;Options;100,1000,10000
+5;Earth average orbital speed?;Options;29.78 km/s,107 km/h,150000 km/h
