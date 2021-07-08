@@ -9,11 +9,12 @@ import java.io.Reader;
 import java.util.Objects;
 
 @AllArgsConstructor
-public class CsvDataProvider {
+public class CsvReaderProviderFromResourceFile implements CsvReaderProvider {
 
     @NonNull
     private final String resourcePath;
 
+    @Override
     public Reader getReader(){
         return new BufferedReader(new InputStreamReader(
                 Objects.requireNonNull(this.getClass().getResourceAsStream(resourcePath))));

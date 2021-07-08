@@ -1,8 +1,8 @@
 package org.maxvas;
 
 import org.junit.jupiter.api.Test;
-import org.maxvas.service.CsvDataProvider;
-import org.maxvas.service.QuestionReader;
+import org.maxvas.service.CsvReaderProviderFromResourceFile;
+import org.maxvas.service.QuestionReaderService;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -18,9 +18,9 @@ public class QuestionReaderTest {
 
     @Test
     public void questionReaderTest() throws IOException {
-        var csvDataProviderMock = Mockito.mock(CsvDataProvider.class);
+        var csvDataProviderMock = Mockito.mock(CsvReaderProviderFromResourceFile.class);
         when(csvDataProviderMock.getReader()).thenReturn(new StringReader(TEST_CSV));
-        var questionReader = new QuestionReader(csvDataProviderMock);
+        var questionReader = new QuestionReaderService(csvDataProviderMock);
 
         var list = questionReader.readQuestions();
         assertNotNull(list);
