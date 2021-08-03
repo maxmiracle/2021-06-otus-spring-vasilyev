@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.maxvas.dao.AnswerType;
 import org.maxvas.dao.Question;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @AllArgsConstructor
+@Service
 public class PrintQuestionService implements PrintQuestion {
 
     public void printQuestion(Question question)

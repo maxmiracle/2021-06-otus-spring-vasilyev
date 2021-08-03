@@ -23,4 +23,7 @@ public class Question {
     @CsvBindAndSplitByName(elementType = String.class, splitOn = ",")
     private List<String> options;
 
+    @CsvBindByName
+    private Integer rightAnswerIndex;
+
 }
