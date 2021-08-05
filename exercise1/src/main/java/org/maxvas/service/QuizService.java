@@ -6,7 +6,6 @@ import org.maxvas.dao.Question;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -25,7 +24,7 @@ public class QuizService {
         this.printQuestionService = printQuestionService;
     }
 
-    public void conductQuiz() throws IOException {
+    public void conductQuiz() {
         QuizContext quizContext = new QuizContext(threshold, scanner);
         printQuestionService.printQuestion("What is your name and surname?");
         quizContext.scanUserName();

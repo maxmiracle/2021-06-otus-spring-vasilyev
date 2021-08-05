@@ -18,7 +18,7 @@ public class QuestionReaderService implements QuestionReader {
     private final CsvReaderProvider csvReaderProvider;
 
     @Override
-    public List<Question> readQuestions() throws IOException {
+    public List<Question> readQuestions() {
         try (var reader = csvReaderProvider.getReader()) {
 
             CsvToBean<Question> csvToBean = new CsvToBeanBuilder<Question>(reader)
@@ -26,6 +26,8 @@ public class QuestionReaderService implements QuestionReader {
                     .withSeparator(';')
                     .build();
             return csvToBean.parse();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
