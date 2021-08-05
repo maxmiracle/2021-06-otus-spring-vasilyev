@@ -1,22 +1,29 @@
-package org.maxvas.service;
+package org.maxvas;
 
 import org.maxvas.dao.Question;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class MarkService {
-
-    private int rightAnswersCount = 0;
-
+public class QuizContext {
     private final List<Object> answers = new ArrayList<>();
+    private final int threshold;
+    private final Scanner scanner;
+    private int rightAnswersCount = 0;
+    private String userName;
 
-    @Value("${questions.threshold}")
-    private int threshold;
+    public QuizContext(int threshold, Scanner scanner) {
+        this.threshold = threshold;
+        this.scanner = scanner;
+    }
 
-    public void getAnswer(Question question, Scanner scanner) {
+    public void scanUserName() {
+        userName = scanner.next();
+    }
+
+
+    public void scanAnswer(Question question, Scanner scanner) {
         String rightAnswer = question.getOptions().get(question.getRightAnswerIndex() - 1);
         scanner.nextLine();
         boolean result = false;
@@ -33,12 +40,16 @@ public class MarkService {
                 result = rightAnswer.equalsIgnoreCase(answerInt.toString());
                 break;
         }
-        if (result == true)
+        if (result)
             rightAnswersCount++;
     }
 
-    public int getRightAnswersCount() {
-        return rightAnswersCount;
+    public void showResult() {
+        if (isTestPassed()) {
+            System.out.printf("User %s - passed!\n", userName);
+        } else {
+            System.out.printf("User %s failed. Try next time.\n", userName);
+        }
     }
 
     public boolean isTestPassed() {

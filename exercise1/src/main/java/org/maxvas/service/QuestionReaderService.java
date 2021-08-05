@@ -5,7 +5,6 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.maxvas.dao.Question;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,7 +25,7 @@ public class QuestionReaderService implements QuestionReader {
                     .withType(Question.class)
                     .withSeparator(';')
                     .build();
-           return csvToBean.parse();
+            return csvToBean.parse();
         }
     }
 }

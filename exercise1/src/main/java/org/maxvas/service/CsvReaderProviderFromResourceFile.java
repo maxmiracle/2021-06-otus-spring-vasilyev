@@ -1,8 +1,7 @@
 package org.maxvas.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,8 +9,7 @@ import java.io.Reader;
 import java.util.Objects;
 
 
-@Service
-@PropertySource("classpath:application.properties")
+@Component
 public class CsvReaderProviderFromResourceFile implements CsvReaderProvider {
 
     private final String resourcePath;

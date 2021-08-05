@@ -3,12 +3,14 @@ package org.maxvas.dao;
 import com.opencsv.bean.CsvBindAndSplitByName;
 import com.opencsv.bean.CsvBindByName;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @Slf4j
 @Data
+@Accessors(chain = true)
 public class Question {
 
     @CsvBindByName
