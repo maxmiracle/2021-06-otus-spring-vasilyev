@@ -1,6 +1,6 @@
 package org.maxvas.service;
 
-import org.maxvas.dao.Question;
+import org.maxvas.domain.Question;
 
 import java.util.List;
 

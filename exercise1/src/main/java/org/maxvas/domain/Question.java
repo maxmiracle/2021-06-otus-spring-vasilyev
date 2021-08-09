@@ -1,4 +1,4 @@
-package org.maxvas.dao;
+package org.maxvas.domain;
 
 import com.opencsv.bean.CsvBindAndSplitByName;
 import com.opencsv.bean.CsvBindByName;
@@ -27,5 +27,10 @@ public class Question {
 
     @CsvBindByName
     private Integer rightAnswerIndex;
+
+    public String getRightAnswer() {
+        return getRightAnswerIndex().toString();
+    }
+
 
 }

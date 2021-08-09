@@ -1,39 +1,52 @@
 package org.maxvas.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.maxvas.QuizContext;
-import org.maxvas.dao.Question;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
+import org.maxvas.domain.Question;
+import org.maxvas.domain.QuizResult;
+import org.maxvas.domain.User;
+import org.maxvas.util.UserResultFormatter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Scanner;
 
-@Slf4j
 @Component
+@AllArgsConstructor
 public class QuizService {
 
+    private static final String FIRST_NAME_QUESTION = "What is your first name?";
+    private static final String LAST_NAME_QUESTION = "What is your last name?";
     private final QuestionReader questionReader;
-    private final PrintQuestion printQuestionService;
-    private final Scanner scanner = new Scanner(System.in);
-    private final int threshold;
-
-    QuizService(@Value("${questions.threshold}") int threshold, QuestionReader questionReader, PrintQuestion printQuestionService) {
-        this.threshold = threshold;
-        this.questionReader = questionReader;
-        this.printQuestionService = printQuestionService;
-    }
+    private final PrintQuestionService printQuestionService;
+    private final IOService ioService;
+    private final QuizResultsAssessor quizResultsAssessor;
+    private final AnswerCheckerService answerCheckerService;
 
     public void conductQuiz() {
-        QuizContext quizContext = new QuizContext(threshold, scanner);
-        printQuestionService.printQuestion("What is your name and surname?");
-        quizContext.scanUserName();
+        QuizResult quizResult = new QuizResult();
+        fillInitialInfo(quizResult);
         List<Question> questionList = questionReader.readQuestions();
+        askQuestions(quizResult, questionList);
+        quizResultsAssessor.assesAndSetResults(quizResult);
+        ioService.print(UserResultFormatter.formatUserResult(quizResult));
+    }
+
+    private void askQuestions(QuizResult quizResult, List<Question> questionList) {
         questionList.forEach(question -> {
             printQuestionService.printQuestion(question);
-            quizContext.scanAnswer(question, scanner);
+            String answer = ioService.getAnswer();
+            if (answerCheckerService.checkAnswer(question, answer)) {
+                quizResult.incrementRightAnswersCount();
+            }
         });
-        quizContext.showResult();
+    }
+
+    private void fillInitialInfo(QuizResult quizResult) {
+        printQuestionService.printQuestion(FIRST_NAME_QUESTION);
+        User user = new User();
+        user.setFirstName(ioService.getAnswer());
+        printQuestionService.printQuestion(LAST_NAME_QUESTION);
+        user.setLastName(ioService.getAnswer());
+        quizResult.setUser(user);
     }
 
 }

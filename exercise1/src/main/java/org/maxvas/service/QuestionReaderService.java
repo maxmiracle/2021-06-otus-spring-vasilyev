@@ -4,7 +4,7 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.maxvas.dao.Question;
+import org.maxvas.domain.Question;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

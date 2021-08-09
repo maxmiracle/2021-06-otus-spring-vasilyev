@@ -1,5 +1,6 @@
 package org.maxvas;
 
+import org.maxvas.conf.QuizConfiguration;
 import org.maxvas.service.QuizService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
