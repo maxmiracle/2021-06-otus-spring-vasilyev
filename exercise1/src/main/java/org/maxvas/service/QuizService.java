@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import org.maxvas.domain.Question;
 import org.maxvas.domain.QuizResult;
 import org.maxvas.domain.User;
-import org.maxvas.util.UserResultFormatter;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 @AllArgsConstructor
 public class QuizService {
 
@@ -20,17 +19,19 @@ public class QuizService {
     private final IOService ioService;
     private final QuizResultsAssessor quizResultsAssessor;
     private final AnswerCheckerService answerCheckerService;
+    private final UserResultFormatter userResultFormatter;
 
     public void conductQuiz() {
-        QuizResult quizResult = new QuizResult();
-        fillInitialInfo(quizResult);
+        User user = askUserName();
         List<Question> questionList = questionReader.readQuestions();
-        askQuestions(quizResult, questionList);
-        quizResultsAssessor.assesAndSetResults(quizResult);
-        ioService.print(UserResultFormatter.formatUserResult(quizResult));
+        QuizResult quizResult = askQuestions(user, questionList);
+        quizResult.setTestPassed(quizResultsAssessor.assesResults(quizResult));
+        ioService.print(userResultFormatter.formatUserResult(quizResult));
     }
 
-    private void askQuestions(QuizResult quizResult, List<Question> questionList) {
+    private QuizResult askQuestions(User user, List<Question> questionList) {
+        QuizResult quizResult = new QuizResult();
+        quizResult.setUser(user);
         questionList.forEach(question -> {
             printQuestionService.printQuestion(question);
             String answer = ioService.getAnswer();
@@ -38,15 +39,16 @@ public class QuizService {
                 quizResult.incrementRightAnswersCount();
             }
         });
+        return quizResult;
     }
 
-    private void fillInitialInfo(QuizResult quizResult) {
-        printQuestionService.printQuestion(FIRST_NAME_QUESTION);
+    private User askUserName() {
+        ioService.print(FIRST_NAME_QUESTION);
         User user = new User();
         user.setFirstName(ioService.getAnswer());
-        printQuestionService.printQuestion(LAST_NAME_QUESTION);
+        ioService.print(LAST_NAME_QUESTION);
         user.setLastName(ioService.getAnswer());
-        quizResult.setUser(user);
+        return user;
     }
 
 }

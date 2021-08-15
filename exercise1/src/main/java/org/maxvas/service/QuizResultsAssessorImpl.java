@@ -14,7 +14,7 @@ public class QuizResultsAssessorImpl implements QuizResultsAssessor {
     }
 
     @Override
-    public void assesAndSetResults(QuizResult quizResult) {
-        quizResult.setTestPassed(quizResult.getRightAnswers() >= threshold);
+    public boolean assesResults(QuizResult quizResult) {
+        return quizResult.getRightAnswers() >= threshold;
     }
 }
