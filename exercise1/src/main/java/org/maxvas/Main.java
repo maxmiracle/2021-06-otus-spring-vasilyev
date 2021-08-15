@@ -1,15 +1,16 @@
 package org.maxvas;
 
+import org.maxvas.conf.QuizConfiguration;
 import org.maxvas.service.QuizService;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(QuizConfiguration.class);
         var service = context.getBean(QuizService.class);
         service.conductQuiz();
     }
-
 }
