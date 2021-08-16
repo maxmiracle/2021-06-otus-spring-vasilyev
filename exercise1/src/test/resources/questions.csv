@@ -1,0 +1,6 @@
+number;question;answerType;options;rightAnswerIndex;
+1;The second largest planet in the solar system?;Options;Jupiter,Mars,Saturn;3;
+2;Solve 1 + 2 = ?;Integer;3;3;
+3;How many meters in one kilometer?;Options;100,1000,10000;2;
+4;Earth average orbital speed?;Options;29.78 km/s,107 km/h,150000 km/h;1;
+5;Solve 1 - x = 2. x = ?;Integer;-1;-1;
