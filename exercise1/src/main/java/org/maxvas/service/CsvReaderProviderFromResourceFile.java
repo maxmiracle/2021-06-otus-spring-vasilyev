@@ -1,6 +1,6 @@
 package org.maxvas.service;
 
-import org.maxvas.conf.QuizConfiguration;
+import org.maxvas.conf.CsvFileConfiguration;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -14,8 +14,8 @@ public class CsvReaderProviderFromResourceFile implements CsvReaderProvider {
 
     private final String resourcePath;
 
-    public CsvReaderProviderFromResourceFile(QuizConfiguration quizConfiguration) {
-        this.resourcePath = quizConfiguration.getCsvPath();
+    public CsvReaderProviderFromResourceFile(CsvFileConfiguration csvFileConfiguration) {
+        this.resourcePath = csvFileConfiguration.getCsvPath();
     }
 
     @Override

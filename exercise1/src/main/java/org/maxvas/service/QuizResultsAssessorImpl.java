@@ -1,6 +1,6 @@
 package org.maxvas.service;
 
-import org.maxvas.conf.QuizConfiguration;
+import org.maxvas.conf.AssessmentConfiguration;
 import org.maxvas.domain.QuizResult;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +9,8 @@ public class QuizResultsAssessorImpl implements QuizResultsAssessor {
 
     private final int threshold;
 
-    public QuizResultsAssessorImpl(QuizConfiguration quizConfiguration) {
-        this.threshold = quizConfiguration.getThreshold();
+    public QuizResultsAssessorImpl(AssessmentConfiguration assessmentConfiguration) {
+        this.threshold = assessmentConfiguration.getThreshold();
     }
 
     @Override

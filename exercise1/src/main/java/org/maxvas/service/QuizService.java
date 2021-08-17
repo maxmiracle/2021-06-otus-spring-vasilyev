@@ -23,8 +23,7 @@ public class QuizService {
     private final QuizResultsAssessor quizResultsAssessor;
     private final AnswerCheckerService answerCheckerService;
     private final UserResultFormatter userResultFormatter;
-    private final MessageSource messageSource;
-    private final QuizConfiguration quizConfiguration;
+    private final LocaleMessageService localeMessageService;
 
     public QuizResult conductQuiz() {
         User user = askUserName();
@@ -49,11 +48,10 @@ public class QuizService {
     }
 
     private User askUserName() {
-        Locale locale = Locale.forLanguageTag(quizConfiguration.getLocale());
-        ioService.print(messageSource.getMessage(FIRST_NAME_QUESTION, null, locale));
+        ioService.print(localeMessageService.getMessage(FIRST_NAME_QUESTION));
         User user = new User();
         user.setFirstName(ioService.getAnswer());
-        ioService.print(messageSource.getMessage(LAST_NAME_QUESTION, null, locale));
+        ioService.print(localeMessageService.getMessage(LAST_NAME_QUESTION));
         user.setLastName(ioService.getAnswer());
         return user;
     }
