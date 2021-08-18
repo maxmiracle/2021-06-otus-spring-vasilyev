@@ -1,0 +1,11 @@
+${AnsiBackground.RED}${AnsiColor.GREEN}
+      o__ __o                      o                    o__ __o                                           o
+     /v     v\                   _<|>_                 /v     v\                                        _<|>_
+    />       <\                                       />       <\
+  o/           \o    o       o     o    _\o____      _\o____          o__  __o   \o__ __o    o      o     o        __o__    o__  __o
+ <|             |>  <|>     <|>   <|>       /             \_\__o__   /v      |>   |     |>  <|>    <|>   <|>      />  \    /v      |>
+  \\           //   < >     < >   / \     o/                    \   />      //   / \   < >  < >    < >   / \    o/        />      //
+    \       \o/      |       |    \o/    /v           \         /   \o    o/     \o/         \o    o/    \o/   <|         \o    o/
+     o       |       o       o     |    />             o       o     v\  /v __o   |           v\  /v      |     \\         v\  /v __o
+     <\__   / \      <\__ __/>    / \   \>__o__        <\__ __/>      <\/> __/>  / \           <\/>      / \     _\o__</    <\/> __/>
+${AnsiBackground.DEFAULT}${AnsiColor.DEFAULT}

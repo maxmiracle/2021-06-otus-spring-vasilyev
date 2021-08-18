@@ -1,16 +1,23 @@
 package org.maxvas;
 
-import org.maxvas.conf.QuizConfiguration;
+import lombok.AllArgsConstructor;
 import org.maxvas.service.QuizService;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.IOException;
 
-public class Main {
+@SpringBootApplication
+@AllArgsConstructor
+public class Main implements CommandLineRunner {
+    private final QuizService quizService;
 
-    public static void main(String[] args) throws IOException {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(QuizConfiguration.class);
-        var service = context.getBean(QuizService.class);
-        service.conductQuiz();
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+
+    @Override
+    public void run(String... args) {
+        quizService.conductQuiz();
     }
 }

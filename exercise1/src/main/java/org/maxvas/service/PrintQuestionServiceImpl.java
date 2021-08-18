@@ -24,10 +24,6 @@ public class PrintQuestionServiceImpl implements PrintQuestionService {
         }
     }
 
-    public void printQuestion(String question) {
-        ioService.print(String.format("%s", question));
-    }
-
     private void printOption(int i, String s) {
         ioService.print(String.format("\t%d) %s", i, s));
     }

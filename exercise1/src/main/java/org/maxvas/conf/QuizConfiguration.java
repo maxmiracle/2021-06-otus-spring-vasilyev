@@ -1,12 +1,23 @@
 package org.maxvas.conf;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@Configuration
-@ComponentScan(basePackages = {"org.maxvas"})
-@PropertySource("classpath:application.properties")
-public class QuizConfiguration {
 
+@ConfigurationProperties(prefix = "questions")
+@Getter
+@Setter
+@Component
+public class QuizConfiguration implements CsvFileConfiguration, AssessmentConfiguration, LocaleConfiguration {
+
+    private String csvFilename;
+    private int threshold;
+    private String locale;
+
+    @Override
+    public String getCsvPath() {
+        return String.format("/%s_%s.csv", csvFilename, locale);
+    }
 }

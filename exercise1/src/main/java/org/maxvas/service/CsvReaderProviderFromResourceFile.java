@@ -1,6 +1,6 @@
 package org.maxvas.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.maxvas.conf.CsvFileConfiguration;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -14,8 +14,8 @@ public class CsvReaderProviderFromResourceFile implements CsvReaderProvider {
 
     private final String resourcePath;
 
-    public CsvReaderProviderFromResourceFile(@Value("${questions.csv.path}") String resourcePath) {
-        this.resourcePath = resourcePath;
+    public CsvReaderProviderFromResourceFile(CsvFileConfiguration csvFileConfiguration) {
+        this.resourcePath = csvFileConfiguration.getCsvPath();
     }
 
     @Override

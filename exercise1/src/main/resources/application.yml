@@ -1,0 +1,4 @@
+questions:
+  threshold: 2
+  locale: ru
+  csv_filename: questions

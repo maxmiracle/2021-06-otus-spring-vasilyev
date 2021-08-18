@@ -4,6 +4,4 @@ import org.maxvas.domain.Question;
 
 public interface PrintQuestionService {
     void printQuestion(Question question);
-
-    void printQuestion(String question);
 }
