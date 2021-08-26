@@ -9,11 +9,10 @@ import org.springframework.shell.standard.ShellMethod;
 @AllArgsConstructor
 public class QuizShell {
 
-    QuizService quizService;
+    private final QuizService quizService;
 
     @ShellMethod(value = "Start quiz", key = {"start", "quiz", "q"})
-    public String startQuiz()
-    {
+    public String startQuiz() {
         quizService.conductQuiz();
         return "Quiz finished";
     }
