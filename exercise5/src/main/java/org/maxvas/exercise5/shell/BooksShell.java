@@ -43,7 +43,7 @@ public class BooksShell {
             @ShellOption UUID id) {
         Optional<Book> book = bookDao.getById(id);
         if (book.isPresent()) {
-            return ToStringBuilder.reflectionToString(book, ToStringStyle.NO_CLASS_NAME_STYLE);
+            return ToStringBuilder.reflectionToString(book.get(), ToStringStyle.NO_CLASS_NAME_STYLE);
         } else {
             return "Book not found";
         }

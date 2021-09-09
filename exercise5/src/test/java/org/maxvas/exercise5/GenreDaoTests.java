@@ -1,10 +1,14 @@
 package org.maxvas.exercise5;
 
 import org.junit.jupiter.api.Test;
+import org.maxvas.exercise5.dao.AuthorDaoJdbc;
 import org.maxvas.exercise5.dao.GenreDao;
+import org.maxvas.exercise5.dao.GenreDaoJdbc;
 import org.maxvas.exercise5.domain.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +17,8 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
+@JdbcTest
+@Import(GenreDaoJdbc.class)
 class GenreDaoTests {
 
     @Autowired
@@ -21,7 +26,7 @@ class GenreDaoTests {
 
 
     @Test
-    void create() {
+    public void create() {
         int count = genreDao.count();
         String testName = "Name";
         Genre genre = new Genre()
@@ -34,7 +39,7 @@ class GenreDaoTests {
     }
 
     @Test
-    void delete() {
+    public void delete() {
         List<Genre> genreList = genreDao.getAll();
         UUID genreIdToDelete = genreList.get(0).getId();
         genreDao.deleteById(genreIdToDelete);
@@ -43,7 +48,7 @@ class GenreDaoTests {
     }
 
     @Test
-    void getByName() {
+    public void getByName() {
         List<Genre> genreList = genreDao.getAll();
         String name = genreList.get(0).getName();
         Optional<Genre> otherGenre = genreDao.getByName(name);
@@ -52,7 +57,7 @@ class GenreDaoTests {
     }
 
     @Test
-    void update() {
+    public void update() {
         String newName = "New Name Genre";
         List<Genre> genreList = genreDao.getAll();
         UUID genreId = genreList.get(0).getId();

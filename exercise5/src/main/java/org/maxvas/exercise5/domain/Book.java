@@ -10,6 +10,6 @@ import java.util.UUID;
 public class Book {
     private UUID id;
     private String title;
-    private UUID authorId;
-    private UUID genreId;
+    private Author author;
+    private Genre genre;
 }

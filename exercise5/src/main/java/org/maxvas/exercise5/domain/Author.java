@@ -8,6 +8,6 @@ import java.util.UUID;
 @Data
 @Accessors(chain = true)
 public class Author {
-    UUID id;
-    String name;
+    private UUID id;
+    private String name;
 }

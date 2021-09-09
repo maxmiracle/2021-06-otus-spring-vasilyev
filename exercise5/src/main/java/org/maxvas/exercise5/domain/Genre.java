@@ -8,6 +8,6 @@ import java.util.UUID;
 @Data
 @Accessors(chain = true)
 public class Genre {
-    UUID id;
-    String name;
+    private UUID id;
+    private String name;
 }

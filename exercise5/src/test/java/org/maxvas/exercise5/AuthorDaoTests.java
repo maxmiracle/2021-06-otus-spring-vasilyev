@@ -2,9 +2,11 @@ package org.maxvas.exercise5;
 
 import org.junit.jupiter.api.Test;
 import org.maxvas.exercise5.dao.AuthorDao;
+import org.maxvas.exercise5.dao.AuthorDaoJdbc;
 import org.maxvas.exercise5.domain.Author;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.context.annotation.Import;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +15,8 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
+@JdbcTest
+@Import(AuthorDaoJdbc.class)
 class AuthorDaoTests {
 
     @Autowired

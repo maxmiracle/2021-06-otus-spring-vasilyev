@@ -17,5 +17,7 @@ public interface BookDao {
 
     Optional<Book> getById(UUID id);
 
+    Optional<Book> getByTitle(String title);
+
     void deleteById(UUID id);
 }
