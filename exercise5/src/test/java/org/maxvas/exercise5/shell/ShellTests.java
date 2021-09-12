@@ -1,4 +1,4 @@
-package org.maxvas.exercise5;
+package org.maxvas.exercise5.shell;
 
 import org.junit.jupiter.api.Test;
 import org.maxvas.exercise5.dao.BookDao;
@@ -17,30 +17,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-class IntegrationTests {
+class ShellTests {
 
     private static final String COMMAND_CREATE_BOOK = "create --title BookTitle1 --author Author1 --genre Genre1";
     private static final String COMMAND_DELETE_BOOK = "delete --id %s";
     private static final String SHOW_ALL_BOOKS = "all";
-    @Autowired
-    BookService bookService;
+
     @Autowired
     private BookDao bookDao;
     @Autowired
     private Shell shell;
 
     @Test
-    public void createBook() {
-        UUID bookId = bookService.createBook("TitleN0", "Author A0. A0.", "Genre0");
-        Optional<Book> book = bookDao.getById(bookId);
-        assertTrue(book.isPresent());
-        String title = book.get().getTitle();
-        assertEquals("TitleN0", title);
-    }
-
-    @Test
     public void createBookShell() {
+        // act
         String newBookId = (String) shell.evaluate(() -> COMMAND_CREATE_BOOK);
+        // assert
         UUID bookId = UUID.fromString(newBookId);
         Optional<Book> book = bookDao.getById(bookId);
         assertTrue(book.isPresent());
@@ -49,12 +41,15 @@ class IntegrationTests {
 
     @Test
     public void deleteBookShell() {
+        // prepare
         String allBooks = (String) shell.evaluate(() -> SHOW_ALL_BOOKS);
         UUID idBookToDelete = getFirstBookId(allBooks);
         Optional<Book> book = bookDao.getById(idBookToDelete);
         assertTrue(book.isPresent());
+        // act
         shell.evaluate(() -> String.format(COMMAND_DELETE_BOOK, idBookToDelete));
         Optional<Book> deletedBook = bookDao.getById(idBookToDelete);
+        // assert
         assertTrue(deletedBook.isEmpty());
     }
 

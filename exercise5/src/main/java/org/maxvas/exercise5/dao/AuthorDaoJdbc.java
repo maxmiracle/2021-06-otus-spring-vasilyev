@@ -4,7 +4,11 @@ import lombok.AllArgsConstructor;
 import org.maxvas.exercise5.domain.Author;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -24,9 +28,13 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public UUID insert(Author author) {
-        return namedParameterJdbcOperations.queryForObject("SELECT ID FROM FINAL TABLE (insert into author (name) values (:name))",
-                Map.of("name", author.getName()),
-                UUID.class);
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("name", author.getName());
+        namedParameterJdbcOperations.update("insert into author (name) values (:name)",
+                sqlParameterSource,
+                generatedKeyHolder);
+        return generatedKeyHolder.getKeyAs(UUID.class);
     }
 
     @Override
@@ -80,9 +88,7 @@ public class AuthorDaoJdbc implements AuthorDao {
         public Author mapRow(ResultSet resultSet, int i) throws SQLException {
             UUID id = resultSet.getObject("id", UUID.class);
             String name = resultSet.getString("name");
-            return new Author()
-                    .setId(id)
-                    .setName(name);
+            return new Author(id, name);
         }
     }
 }

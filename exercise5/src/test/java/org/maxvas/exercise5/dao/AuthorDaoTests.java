@@ -1,4 +1,4 @@
-package org.maxvas.exercise5;
+package org.maxvas.exercise5.dao;
 
 import org.junit.jupiter.api.Test;
 import org.maxvas.exercise5.dao.AuthorDao;
@@ -27,8 +27,7 @@ class AuthorDaoTests {
     void create() {
         int count = authorDao.count();
         String testName = "Name";
-        Author author = new Author()
-                .setName("Name");
+        Author author = new Author(null, testName);
         UUID authorID = authorDao.insert(author);
         Optional<Author> savedAuthor = authorDao.getById(authorID);
         assertTrue(savedAuthor.isPresent());
@@ -59,8 +58,7 @@ class AuthorDaoTests {
         String newName = "New Name Author";
         List<Author> authorList = authorDao.getAll();
         UUID authorId = authorList.get(0).getId();
-        Author updatedAuthor = new Author().setId(authorId)
-                .setName(newName);
+        Author updatedAuthor = new Author(authorId, newName);
         authorDao.update(updatedAuthor);
         Optional<Author> newUpdatedAuthor = authorDao.getById(authorId);
         assertEquals(newName, newUpdatedAuthor.get().getName());

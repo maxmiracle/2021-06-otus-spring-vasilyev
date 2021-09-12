@@ -6,7 +6,10 @@ import org.maxvas.exercise5.domain.Book;
 import org.maxvas.exercise5.domain.Genre;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
@@ -27,9 +30,16 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public UUID insert(Book book) {
-        return namedParameterJdbcOperations.queryForObject("SELECT ID FROM FINAL TABLE (insert into book (title, author_id, genre_id) values (:title, :author_id, :genre_id))",
-                Map.of("title", book.getTitle(), "author_id", book.getAuthor().getId(), "genre_id", book.getGenre().getId()),
-                UUID.class);
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("title", book.getTitle())
+                .addValue("author_id", book.getAuthor().getId())
+                .addValue("genre_id", book.getGenre().getId());
+        namedParameterJdbcOperations.update("insert into book (title, author_id, genre_id) values (:title, :author_id, :genre_id)",
+               sqlParameterSource,
+                generatedKeyHolder
+               );
+        return generatedKeyHolder.getKeyAs(UUID.class);
     }
 
     @Override
@@ -43,8 +53,9 @@ public class BookDaoJdbc implements BookDao {
         Map<String, Object> params = Collections.singletonMap("id", id);
         try {
             return Optional.ofNullable(namedParameterJdbcOperations.queryForObject(
-                    "select b.id as id, b.title as title, b.author_id as author_id, a.name as author_name, b.genre_id as genre_id, g.name as genre_name from book as b, genre as g, author as a\n" +
-                            " where a.id = b.author_id and g.id = b.genre_id and  b.id=:id", params, new BookMapper()));
+                    "select b.id as id, b.title as title, b.author_id as author_id, a.name as author_name, b.genre_id as genre_id, g.name as genre_name \n"+
+                            " from book as b left join genre as g on g.id = b.genre_id left join author as a on a.id = b.author_id \n" +
+                            " where  b.id=:id", params, new BookMapper()));
         } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
             return Optional.empty();
         }
@@ -55,8 +66,9 @@ public class BookDaoJdbc implements BookDao {
         Map<String, Object> params = Collections.singletonMap("title", title);
         try {
             return Optional.ofNullable(namedParameterJdbcOperations.queryForObject(
-                    "select b.id as id, b.title as title, b.author_id as author_id, a.name as author_name, b.genre_id as genre_id, g.name as genre_name from book as b, genre as g, author as a\n" +
-                            " where a.id = b.author_id and g.id = b.genre_id and  b.title=:title", params, new BookMapper()));
+                    "select b.id as id, b.title as title, b.author_id as author_id, a.name as author_name, b.genre_id as genre_id, g.name as genre_name \n"+
+                            " from book as b left join genre as g on g.id = b.genre_id left join author as a on a.id = b.author_id \n" +
+                            " where b.title=:title", params, new BookMapper()));
         } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
             return Optional.empty();
         }
@@ -64,8 +76,9 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public List<Book> getAll() {
-        return namedParameterJdbcOperations.query("select b.id as id, b.title as title, b.author_id as author_id, a.name as author_name, b.genre_id as genre_id, g.name as genre_name from book as b, genre as g, author as a\n" +
-                " where a.id = b.author_id and g.id = b.genre_id", new BookMapper());
+        return namedParameterJdbcOperations.query("select b.id as id, b.title as title, b.author_id as author_id, a.name as author_name, b.genre_id as genre_id, g.name as genre_name \n"+
+                " from book as b left join genre as g on g.id = b.genre_id left join author as a on a.id = b.author_id",
+                new BookMapper());
     }
 
     @Override
@@ -87,17 +100,9 @@ public class BookDaoJdbc implements BookDao {
             UUID genreId = resultSet.getObject("genre_id", java.util.UUID.class);
             String genreName = resultSet.getString("genre_name");
 
-            Author author = new Author()
-                    .setName(authorName)
-                    .setId(authorId);
-            Genre genre = new Genre()
-                    .setName(genreName)
-                    .setId(genreId);
-            return new Book()
-                    .setId(id)
-                    .setTitle(title)
-                    .setAuthor(author)
-                    .setGenre(genre);
+            Author author = new Author(authorId, authorName);
+            Genre genre = new Genre(genreId, genreName);
+            return new Book(id, title, author, genre);
         }
     }
 }

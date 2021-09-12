@@ -1,4 +1,4 @@
-package org.maxvas.exercise5;
+package org.maxvas.exercise5.dao;
 
 import org.junit.jupiter.api.Test;
 import org.maxvas.exercise5.dao.AuthorDaoJdbc;
@@ -29,8 +29,7 @@ class GenreDaoTests {
     public void create() {
         int count = genreDao.count();
         String testName = "Name";
-        Genre genre = new Genre()
-                .setName("Name");
+        Genre genre = new Genre(null, testName);
         UUID genreID = genreDao.insert(genre);
         Optional<Genre> savedGenre = genreDao.getById(genreID);
         assertTrue(savedGenre.isPresent());
@@ -61,8 +60,7 @@ class GenreDaoTests {
         String newName = "New Name Genre";
         List<Genre> genreList = genreDao.getAll();
         UUID genreId = genreList.get(0).getId();
-        Genre updatedGenre = new Genre().setId(genreId)
-                .setName(newName);
+        Genre updatedGenre = new Genre(genreId, newName);
         genreDao.update(updatedGenre);
         Optional<Genre> newUpdatedGenre = genreDao.getById(genreId);
         assertEquals(newName, newUpdatedGenre.get().getName());

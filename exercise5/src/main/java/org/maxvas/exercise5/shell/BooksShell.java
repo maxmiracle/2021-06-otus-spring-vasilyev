@@ -24,9 +24,7 @@ public class BooksShell {
 
     @ShellMethod(value = "Show all books", key = {"all", "a"})
     public String showAllBooks() {
-        return bookDao.getAll().stream()
-                .map(book -> ToStringBuilder.reflectionToString(book, ToStringStyle.NO_CLASS_NAME_STYLE))
-                .collect(Collectors.joining(",\n"));
+        return bookService.allBooksInfo();
     }
 
     @ShellMethod(value = "Create book", key = {"create", "c"})
@@ -41,19 +39,13 @@ public class BooksShell {
     @ShellMethod(value = "Read book", key = {"read", "r"})
     public String read(
             @ShellOption UUID id) {
-        Optional<Book> book = bookDao.getById(id);
-        if (book.isPresent()) {
-            return ToStringBuilder.reflectionToString(book.get(), ToStringStyle.NO_CLASS_NAME_STYLE);
-        } else {
-            return "Book not found";
-        }
-
+        return bookService.bookInfo(id);
     }
 
     @ShellMethod(value = "Delete book", key = {"delete", "d"})
     public void delete(
             @ShellOption UUID id) {
-        bookDao.deleteById(id);
+        bookService.deleteById(id);
     }
 
     @ShellMethod(value = "Update book", key = {"update", "u"})

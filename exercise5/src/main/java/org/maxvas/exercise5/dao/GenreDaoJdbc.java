@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import org.maxvas.exercise5.domain.Genre;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -24,9 +27,13 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public UUID insert(Genre genre) {
-        return namedParameterJdbcOperations.queryForObject("SELECT ID FROM FINAL TABLE (insert into genre (name) values (:name))",
-                Map.of("name", genre.getName()),
-                UUID.class);
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("name", genre.getName());
+        namedParameterJdbcOperations.update("insert into genre (name) values (:name)",
+                sqlParameterSource,
+                generatedKeyHolder);
+        return generatedKeyHolder.getKeyAs(UUID.class);
     }
 
     @Override
@@ -80,9 +87,7 @@ public class GenreDaoJdbc implements GenreDao {
         public Genre mapRow(ResultSet resultSet, int i) throws SQLException {
             UUID id = resultSet.getObject("id", UUID.class);
             String name = resultSet.getString("name");
-            return new Genre()
-                    .setId(id)
-                    .setName(name);
+            return new Genre(id, name);
         }
     }
 }

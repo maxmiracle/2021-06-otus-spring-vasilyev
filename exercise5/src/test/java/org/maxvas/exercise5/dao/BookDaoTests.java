@@ -1,4 +1,4 @@
-package org.maxvas.exercise5;
+package org.maxvas.exercise5.dao;
 
 import org.junit.jupiter.api.Test;
 import org.maxvas.exercise5.dao.AuthorDaoJdbc;
@@ -28,20 +28,14 @@ class BookDaoTests {
     @Autowired
     private BookDao bookDao;
 
-    @Autowired
-    private BookService bookService;
-
 
     @Test
     public void create() {
         int count = bookDao.count();
         String testTitle = "Title";
-        Author newAuthor = bookService.getAuthorByName("New author");
-        Genre newGenre = bookService.getGenreByName("New genre");
-        Book book = new Book()
-                .setTitle(testTitle)
-                .setAuthor(newAuthor)
-                .setGenre(newGenre);
+        Author newAuthor = new Author(null, "New author");
+        Genre newGenre = new Genre(null, "New genre");
+        Book book = new Book(null, testTitle, newAuthor, newGenre);
         UUID bookID = bookDao.insert(book);
         Optional<Book> savedBook = bookDao.getById(bookID);
         assertTrue(savedBook.isPresent());
@@ -69,20 +63,15 @@ class BookDaoTests {
 
     @Test
     public void update() {
-        String newTitle = "New Name Book";
-        Author updAuthor = bookService.getAuthorByName("Upd author");
-        Genre updGenre = bookService.getGenreByName("Upd genre");
+        String updTitle = "Upd title";
         List<Book> bookList = bookDao.getAll();
         UUID bookId = bookList.get(0).getId();
-        Book updatedBook = new Book().setId(bookId)
-                .setTitle(newTitle)
-                .setAuthor(updAuthor)
-                .setGenre(updGenre);
+        Book updatedBook = bookDao.getById(bookId).get();
+        updatedBook.setTitle(updTitle);
         bookDao.update(updatedBook);
         Optional<Book> newUpdatedBook = bookDao.getById(bookId);
-        assertEquals(newTitle, newUpdatedBook.get().getTitle());
-        assertEquals(updAuthor, newUpdatedBook.get().getAuthor());
-        assertEquals(updGenre, newUpdatedBook.get().getGenre());
+        assertEquals(updTitle, newUpdatedBook.get().getTitle());
+
     }
 
 }

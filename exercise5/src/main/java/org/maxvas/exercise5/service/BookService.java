@@ -10,4 +10,7 @@ public interface BookService {
     Genre getGenreByName(String name);
     Author getAuthorByName(String name);
     void update(UUID id, String title, String authorName, String genreName);
+    String allBooksInfo();
+    String bookInfo(UUID id);
+    void deleteById(UUID id);
 }
