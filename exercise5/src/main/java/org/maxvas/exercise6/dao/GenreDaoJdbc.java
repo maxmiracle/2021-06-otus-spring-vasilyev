@@ -1,13 +1,12 @@
-package org.maxvas.exercise5.dao;
+package org.maxvas.exercise6.dao;
 
 import lombok.AllArgsConstructor;
-import org.maxvas.exercise5.domain.Author;
+import org.maxvas.exercise6.domain.Genre;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
@@ -17,78 +16,78 @@ import java.util.*;
 
 @Repository
 @AllArgsConstructor
-public class AuthorDaoJdbc implements AuthorDao {
+public class GenreDaoJdbc implements GenreDao {
 
     private final NamedParameterJdbcOperations namedParameterJdbcOperations;
 
     @Override
     public int count() {
-        return namedParameterJdbcOperations.queryForObject("select count(id) from author", Map.of(), Integer.class);
+        return namedParameterJdbcOperations.queryForObject("select count(id) from genre", Map.of(), Integer.class);
     }
 
     @Override
-    public UUID insert(Author author) {
+    public UUID insert(Genre genre) {
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-                .addValue("name", author.getName());
-        namedParameterJdbcOperations.update("insert into author (name) values (:name)",
+                .addValue("name", genre.getName());
+        namedParameterJdbcOperations.update("insert into genre (name) values (:name)",
                 sqlParameterSource,
                 generatedKeyHolder);
         return generatedKeyHolder.getKeyAs(UUID.class);
     }
 
     @Override
-    public void update(Author author) {
-        namedParameterJdbcOperations.update("update author set name=:name where id=:id ",
-                Map.of("id", author.getId(), "name", author.getName()));
+    public void update(Genre genre) {
+        namedParameterJdbcOperations.update("update genre set name=:name where id=:id ",
+                Map.of("id", genre.getId(), "name", genre.getName()));
     }
 
     @Override
-    public Optional<Author> getById(UUID id) {
+    public Optional<Genre> getById(UUID id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         try {
-            Author author = namedParameterJdbcOperations.queryForObject(
-                    "select id, name from author where id = :id", params, new AuthorMapper()
+            Genre genre = namedParameterJdbcOperations.queryForObject(
+                    "select id, name from genre where id = :id", params, new GenreMapper()
             );
-            return Optional.ofNullable(author);
+            return Optional.ofNullable(genre);
         } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
             return Optional.empty();
         }
     }
 
     @Override
-    public Optional<Author> getByName(String name) {
+    public Optional<Genre> getByName(String name) {
         Map<String, Object> params = Collections.singletonMap("name", name);
         try {
-            Author author = namedParameterJdbcOperations.queryForObject(
-                    "select id, name from author where name = :name", params, new AuthorMapper()
+            Genre genre = namedParameterJdbcOperations.queryForObject(
+                    "select id, name from genre where name = :name", params, new GenreMapper()
             );
-            return Optional.ofNullable(author);
+            return Optional.ofNullable(genre);
         } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
             return Optional.empty();
         }
     }
 
     @Override
-    public List<Author> getAll() {
-        return namedParameterJdbcOperations.query("select id, name from author", new AuthorMapper());
+    public List<Genre> getAll() {
+        return namedParameterJdbcOperations.query("select id, name from genre", new GenreMapper());
     }
 
     @Override
     public void deleteById(UUID id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         namedParameterJdbcOperations.update(
-                "delete from author where id = :id", params
+                "delete from genre where id = :id", params
         );
     }
 
-    private static class AuthorMapper implements RowMapper<Author> {
+    private static class GenreMapper implements RowMapper<Genre> {
 
         @Override
-        public Author mapRow(ResultSet resultSet, int i) throws SQLException {
+        public Genre mapRow(ResultSet resultSet, int i) throws SQLException {
             UUID id = resultSet.getObject("id", UUID.class);
             String name = resultSet.getString("name");
-            return new Author(id, name);
+            return new Genre(id, name);
         }
     }
 }

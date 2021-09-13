@@ -1,4 +1,4 @@
-package org.maxvas.exercise5.domain;
+package org.maxvas.exercise6.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @Accessors(chain = true)
 @AllArgsConstructor
-public class Genre {
+public class Author {
     private UUID id;
     private String name;
 }

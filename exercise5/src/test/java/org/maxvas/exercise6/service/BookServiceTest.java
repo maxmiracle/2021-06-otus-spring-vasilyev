@@ -1,13 +1,11 @@
-package org.maxvas.exercise5.service;
+package org.maxvas.exercise6.service;
 
 import org.junit.jupiter.api.Test;
-import org.maxvas.exercise5.dao.AuthorDaoJdbc;
-import org.maxvas.exercise5.dao.BookDao;
-import org.maxvas.exercise5.dao.BookDaoJdbc;
-import org.maxvas.exercise5.dao.GenreDaoJdbc;
-import org.maxvas.exercise5.domain.Book;
-import org.maxvas.exercise5.service.BookService;
-import org.maxvas.exercise5.service.BookServiceImpl;
+import org.maxvas.exercise6.dao.AuthorDaoJdbc;
+import org.maxvas.exercise6.dao.BookDao;
+import org.maxvas.exercise6.dao.BookDaoJdbc;
+import org.maxvas.exercise6.dao.GenreDaoJdbc;
+import org.maxvas.exercise6.domain.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
@@ -23,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BookServiceTest {
 
     @Autowired
-    BookService bookService;
+    private BookService bookService;
 
     @Autowired
-    BookDao bookDao;
+    private BookDao bookDao;
 
     @Test
     public void createBook() {

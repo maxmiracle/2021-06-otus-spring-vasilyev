@@ -1,6 +1,6 @@
-package org.maxvas.exercise5.dao;
+package org.maxvas.exercise6.dao;
 
-import org.maxvas.exercise5.domain.Author;
+import org.maxvas.exercise6.domain.Author;
 
 import java.util.List;
 import java.util.Optional;

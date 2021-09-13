@@ -1,14 +1,14 @@
-package org.maxvas.exercise5.service;
+package org.maxvas.exercise6.service;
 
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.maxvas.exercise5.dao.AuthorDao;
-import org.maxvas.exercise5.dao.BookDao;
-import org.maxvas.exercise5.dao.GenreDao;
-import org.maxvas.exercise5.domain.Author;
-import org.maxvas.exercise5.domain.Book;
-import org.maxvas.exercise5.domain.Genre;
+import org.maxvas.exercise6.dao.AuthorDao;
+import org.maxvas.exercise6.dao.BookDao;
+import org.maxvas.exercise6.dao.GenreDao;
+import org.maxvas.exercise6.domain.Author;
+import org.maxvas.exercise6.domain.Book;
+import org.maxvas.exercise6.domain.Genre;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

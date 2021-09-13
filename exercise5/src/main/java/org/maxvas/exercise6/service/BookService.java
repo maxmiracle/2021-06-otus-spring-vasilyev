@@ -1,7 +1,7 @@
-package org.maxvas.exercise5.service;
+package org.maxvas.exercise6.service;
 
-import org.maxvas.exercise5.domain.Author;
-import org.maxvas.exercise5.domain.Genre;
+import org.maxvas.exercise6.domain.Author;
+import org.maxvas.exercise6.domain.Genre;
 
 import java.util.UUID;
 

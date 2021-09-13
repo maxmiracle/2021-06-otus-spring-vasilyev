@@ -1,9 +1,8 @@
-package org.maxvas.exercise5.shell;
+package org.maxvas.exercise6.shell;
 
 import org.junit.jupiter.api.Test;
-import org.maxvas.exercise5.dao.BookDao;
-import org.maxvas.exercise5.domain.Book;
-import org.maxvas.exercise5.service.BookService;
+import org.maxvas.exercise6.dao.BookDao;
+import org.maxvas.exercise6.domain.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.shell.Shell;

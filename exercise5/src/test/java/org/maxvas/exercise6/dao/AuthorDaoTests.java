@@ -1,9 +1,7 @@
-package org.maxvas.exercise5.dao;
+package org.maxvas.exercise6.dao;
 
 import org.junit.jupiter.api.Test;
-import org.maxvas.exercise5.dao.AuthorDao;
-import org.maxvas.exercise5.dao.AuthorDaoJdbc;
-import org.maxvas.exercise5.domain.Author;
+import org.maxvas.exercise6.domain.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;

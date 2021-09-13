@@ -1,18 +1,13 @@
-package org.maxvas.exercise5.shell;
+package org.maxvas.exercise6.shell;
 
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.maxvas.exercise5.dao.BookDao;
-import org.maxvas.exercise5.domain.Book;
-import org.maxvas.exercise5.service.BookService;
+import org.maxvas.exercise6.dao.BookDao;
+import org.maxvas.exercise6.service.BookService;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @ShellComponent
 @AllArgsConstructor

@@ -1,9 +1,9 @@
-package org.maxvas.exercise5.dao;
+package org.maxvas.exercise6.dao;
 
 import lombok.AllArgsConstructor;
-import org.maxvas.exercise5.domain.Author;
-import org.maxvas.exercise5.domain.Book;
-import org.maxvas.exercise5.domain.Genre;
+import org.maxvas.exercise6.domain.Author;
+import org.maxvas.exercise6.domain.Book;
+import org.maxvas.exercise6.domain.Genre;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.Assert;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
