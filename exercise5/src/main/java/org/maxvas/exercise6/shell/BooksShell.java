@@ -1,7 +1,7 @@
 package org.maxvas.exercise6.shell;
 
 import lombok.AllArgsConstructor;
-import org.maxvas.exercise6.dao.BookDao;
+import org.maxvas.exercise6.domain.Book;
 import org.maxvas.exercise6.service.BookService;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -14,7 +14,6 @@ import java.util.UUID;
 public class BooksShell {
 
     private final static String defaultEmpty = null;
-    private final BookDao bookDao;
     private final BookService bookService;
 
     @ShellMethod(value = "Show all books", key = {"all", "a"})
@@ -27,8 +26,8 @@ public class BooksShell {
             @ShellOption String title,
             @ShellOption String author,
             @ShellOption String genre) {
-        UUID bookId = bookService.createBook(title, author, genre);
-        return bookId.toString();
+        Book book = bookService.createBook(title, author, genre);
+        return book.getId().toString();
     }
 
     @ShellMethod(value = "Read book", key = {"read", "r"})

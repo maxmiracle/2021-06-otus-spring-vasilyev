@@ -14,8 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="author")
-public class Author {
+@Table(name="comment")
+public class Comment {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -23,6 +23,10 @@ public class Author {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "body")
+    private String body;
+
+    @ManyToOne
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    private Book book;
 }
