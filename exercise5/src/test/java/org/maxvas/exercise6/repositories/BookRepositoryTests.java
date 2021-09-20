@@ -1,5 +1,6 @@
 package org.maxvas.exercise6.repositories;
 
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 import org.maxvas.exercise6.domain.Author;
 import org.maxvas.exercise6.domain.Book;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,15 +22,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Import({BookRepositoryJpa.class, BookServiceImpl.class, GenreRepositoryJpa.class, AuthorRepositoryJpa.class})
 class BookRepositoryTests {
 
+    int EXPECTED_COUNT_FETCH_ALL = 1;
     @Autowired
     private BookRepository bookRepository;
-
     @Autowired
     private AuthorRepository authorRepository;
-
     @Autowired
     private GenreRepository genreRepository;
-
+    @Autowired
+    private EntityManager entityManager;
 
     @Test
     public void create() {
@@ -74,7 +76,14 @@ class BookRepositoryTests {
         bookRepository.save(updatedBook);
         Optional<Book> newUpdatedBook = bookRepository.findOne(bookId);
         assertEquals(updTitle, newUpdatedBook.get().getTitle());
+    }
 
+    @Test
+    public void findAll() {
+        SessionFactory sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
+        sessionFactory.getStatistics().setStatisticsEnabled(true);
+        List<Book> bookList = bookRepository.findAll();
+        assertEquals(EXPECTED_COUNT_FETCH_ALL, sessionFactory.getStatistics().getPrepareStatementCount());
     }
 
 }
