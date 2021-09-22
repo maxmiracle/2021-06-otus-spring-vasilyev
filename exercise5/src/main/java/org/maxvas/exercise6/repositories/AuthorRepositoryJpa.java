@@ -68,7 +68,6 @@ public class AuthorRepositoryJpa implements AuthorRepository {
 
     @Override
     public void delete(Author author) {
-        Author mergedAuthor = em.merge(author);
-        em.remove(mergedAuthor);
+        em.remove(author);
     }
 }

@@ -26,7 +26,7 @@ public class Comment {
     @Column(name = "body")
     private String body;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 }

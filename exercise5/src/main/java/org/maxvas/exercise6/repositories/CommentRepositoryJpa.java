@@ -68,7 +68,6 @@ public class CommentRepositoryJpa implements CommentRepository {
 
     @Override
     public void delete(Comment comment) {
-        Comment mergedComment = em.merge(comment);
-        em.remove(mergedComment);
+        em.remove(comment);
     }
 }

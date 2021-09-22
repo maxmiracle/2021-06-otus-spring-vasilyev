@@ -8,6 +8,7 @@ import org.maxvas.exercise6.domain.Genre;
 import org.maxvas.exercise6.service.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 
 import javax.persistence.EntityManager;
@@ -19,30 +20,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@Import({BookRepositoryJpa.class, BookServiceImpl.class, GenreRepositoryJpa.class, AuthorRepositoryJpa.class})
+@Import({BookRepositoryJpa.class})
 class BookRepositoryTests {
 
-    int EXPECTED_COUNT_FETCH_ALL = 1;
+    private static int EXPECTED_COUNT_FETCH_ALL = 1;
+
     @Autowired
     private BookRepository bookRepository;
     @Autowired
-    private AuthorRepository authorRepository;
-    @Autowired
-    private GenreRepository genreRepository;
-    @Autowired
-    private EntityManager entityManager;
+    private TestEntityManager entityManager;
 
     @Test
     public void create() {
         Long count = bookRepository.count();
         String testTitle = "Title";
         Author newAuthor = new Author(null, "New author");
-        newAuthor = authorRepository.save(newAuthor);
         Genre newGenre = new Genre(null, "New genre");
-        newGenre = genreRepository.save(newGenre);
-        Book book = new Book(null, testTitle, newAuthor, newGenre, null);
+        entityManager.persist(newAuthor);
+        entityManager.persist(newGenre);
+
+        Book book = new Book(null, testTitle, newAuthor, newGenre);
         Book book1 = bookRepository.save(book);
         Optional<Book> savedBook = bookRepository.findOne(book1.getId());
+
         assertTrue(savedBook.isPresent());
         assertEquals(testTitle, savedBook.get().getTitle());
         assertEquals(count + 1, bookRepository.count());
@@ -80,7 +80,7 @@ class BookRepositoryTests {
 
     @Test
     public void findAll() {
-        SessionFactory sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
+        SessionFactory sessionFactory = entityManager.getEntityManager().getEntityManagerFactory().unwrap(SessionFactory.class);
         sessionFactory.getStatistics().setStatisticsEnabled(true);
         List<Book> bookList = bookRepository.findAll();
         assertEquals(EXPECTED_COUNT_FETCH_ALL, sessionFactory.getStatistics().getPrepareStatementCount());

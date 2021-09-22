@@ -70,8 +70,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public void delete(Book book) {
-        Book mergedBook = em.merge(book);
-        em.remove(mergedBook);
+        em.remove(book);
     }
 
     @Override

@@ -29,43 +29,47 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public Book createBook(String title, String authorName, String genreName) {
-        Genre genre = getGenreByName(genreName);
-        Author author = getAuthorByName(authorName);
-        return bookRepository.save(new Book(null, title, author, genre, null));
-    }
-
-    @Transactional
-    @Override
-    public Genre getGenreByName(String name) {
-        var genre = genreRepository.findOneByName(name);
-        if (genre.isEmpty()) {
-            Genre newGenre = new Genre(null, name);
-            Genre genre1 = genreRepository.save(newGenre);
-            return genre1;
-        } else {
-            return genre.get();
-        }
+        Genre genre = findGenreByName(genreName).orElseGet(()->newGenre(genreName));
+        Author author = findAuthorByName(authorName).orElseGet(()->newAuthor(authorName));
+        return bookRepository.save(new Book(null, title, author, genre));
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Author getAuthorByName(String name) {
+    public Optional<Genre> findGenreByName(String name) {
+        var genre = genreRepository.findOneByName(name);
+        return genre;
+    }
+
+    @Transactional
+    @Override
+    public Genre newGenre(String name) {
+            Genre newGenre = new Genre(null, name);
+            Genre genre = genreRepository.save(newGenre);
+            return genre;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Author> findAuthorByName(String name) {
         var author = authorRepository.findOneByName(name);
-        if (author.isEmpty()) {
+        return author;
+    }
+
+    @Transactional
+    @Override
+    public Author newAuthor(String name) {
             Author newAuthor = new Author(null, name);
-            Author author1 = authorRepository.save(newAuthor);
-            return author1;
-        } else {
-            return author.get();
-        }
+            Author author = authorRepository.save(newAuthor);
+            return author;
     }
 
     @Transactional
     @Override
     public void update(UUID id, String title, String authorName, String genreName) {
         Book updatedBook = bookRepository.findOne(id).orElseThrow(() -> new RuntimeException("Error update book with unknown id"));
-        Genre genre = getGenreByName(genreName);
-        Author author = getAuthorByName(authorName);
+        Genre genre = findGenreByName(genreName).orElseGet(()->newGenre(genreName));
+        Author author = findAuthorByName(authorName).orElseGet(()->newAuthor(authorName));
         updatedBook.setTitle(title);
         updatedBook.setAuthor(author);
         updatedBook.setGenre(genre);

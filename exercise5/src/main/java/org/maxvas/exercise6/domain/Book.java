@@ -33,12 +33,4 @@ public class Book {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     private Genre genre;
-
-    @OneToMany(mappedBy = "book",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @BatchSize(size = 3)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<Comment> comments;
 }
