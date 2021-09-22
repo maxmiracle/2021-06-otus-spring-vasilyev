@@ -31,7 +31,8 @@ class AuthorRepositoryTests {
         String testName = "Name";
         Author author = new Author(null, testName);
         Author savedAuthor = authorRepository.save(author);
-        assertEquals(testName, savedAuthor.getName());
+        Author actualSavedAuthor = em.find(Author.class, savedAuthor.getId());
+        assertEquals(author, actualSavedAuthor);
         assertEquals(count + 1, authorRepository.count());
     }
 

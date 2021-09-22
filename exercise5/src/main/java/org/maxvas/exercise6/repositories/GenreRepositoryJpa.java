@@ -1,6 +1,7 @@
 package org.maxvas.exercise6.repositories;
 
 import lombok.AllArgsConstructor;
+import org.maxvas.exercise6.domain.Author;
 import org.maxvas.exercise6.domain.Genre;
 import org.springframework.stereotype.Repository;
 
@@ -38,15 +39,7 @@ public class GenreRepositoryJpa implements GenreRepository{
 
     @Override
     public Optional<Genre> findOne(UUID id) {
-        TypedQuery<Genre> query = em.createQuery(
-                "select a from Genre a where a.id = :id"
-                , Genre.class);
-        query.setParameter("id", id);
-        try {
-            return Optional.of(query.getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(em.find(Genre.class, id));
     }
 
     @Override
@@ -71,7 +64,6 @@ public class GenreRepositoryJpa implements GenreRepository{
 
     @Override
     public void delete(Genre genre) {
-        Genre mergedGenre = em.merge(genre);
-        em.remove(mergedGenre);
+        em.remove(genre);
     }
 }

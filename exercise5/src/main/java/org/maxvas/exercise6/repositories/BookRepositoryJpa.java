@@ -1,6 +1,7 @@
 package org.maxvas.exercise6.repositories;
 
 import lombok.AllArgsConstructor;
+import org.maxvas.exercise6.domain.Author;
 import org.maxvas.exercise6.domain.Book;
 import org.springframework.stereotype.Repository;
 
@@ -35,15 +36,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public Optional<Book> findOne(UUID id) {
-        TypedQuery<Book> query = em.createQuery(
-                "select b from Book b where b.id = :id"
-                , Book.class);
-        query.setParameter("id", id);
-        try {
-            return Optional.of(query.getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(em.find(Book.class, id));
     }
 
     @Override
@@ -75,8 +68,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public void deleteById(UUID id) {
-        Query query = em.createQuery("delete from Book b where b.id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+        Book book = em.find(Book.class, id);
+        em.remove(book);
     }
 }

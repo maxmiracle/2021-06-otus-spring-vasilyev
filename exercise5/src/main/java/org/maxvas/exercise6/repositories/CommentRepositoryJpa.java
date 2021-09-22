@@ -1,6 +1,7 @@
 package org.maxvas.exercise6.repositories;
 
 import lombok.AllArgsConstructor;
+import org.maxvas.exercise6.domain.Author;
 import org.maxvas.exercise6.domain.Comment;
 import org.springframework.stereotype.Repository;
 
@@ -39,15 +40,7 @@ public class CommentRepositoryJpa implements CommentRepository {
 
     @Override
     public Optional<Comment> findOne(UUID id) {
-        TypedQuery<Comment> query = em.createQuery(
-                "select c from Comment c where c.id = :id"
-                , Comment.class);
-        query.setParameter("id", id);
-        try {
-            return Optional.of(query.getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(em.find(Comment.class, id));
     }
 
     @Override
