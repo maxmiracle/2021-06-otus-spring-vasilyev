@@ -1,10 +1,10 @@
-package org.maxvas.exercise5.shell;
+package org.maxvas.exercise6.shell;
 
 import org.junit.jupiter.api.Test;
-import org.maxvas.exercise5.dao.BookDao;
-import org.maxvas.exercise5.domain.Book;
-import org.maxvas.exercise5.service.BookService;
+import org.maxvas.exercise6.domain.Book;
+import org.maxvas.exercise6.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.shell.Shell;
 
@@ -24,7 +24,7 @@ class ShellTests {
     private static final String SHOW_ALL_BOOKS = "all";
 
     @Autowired
-    private BookDao bookDao;
+    private BookRepository bookRepository;
     @Autowired
     private Shell shell;
 
@@ -34,7 +34,7 @@ class ShellTests {
         String newBookId = (String) shell.evaluate(() -> COMMAND_CREATE_BOOK);
         // assert
         UUID bookId = UUID.fromString(newBookId);
-        Optional<Book> book = bookDao.getById(bookId);
+        Optional<Book> book = bookRepository.findOne(bookId);
         assertTrue(book.isPresent());
         assertEquals("BookTitle1", book.get().getTitle());
     }
@@ -44,11 +44,11 @@ class ShellTests {
         // prepare
         String allBooks = (String) shell.evaluate(() -> SHOW_ALL_BOOKS);
         UUID idBookToDelete = getFirstBookId(allBooks);
-        Optional<Book> book = bookDao.getById(idBookToDelete);
+        Optional<Book> book = bookRepository.findOne(idBookToDelete);
         assertTrue(book.isPresent());
         // act
         shell.evaluate(() -> String.format(COMMAND_DELETE_BOOK, idBookToDelete));
-        Optional<Book> deletedBook = bookDao.getById(idBookToDelete);
+        Optional<Book> deletedBook = bookRepository.findOne(idBookToDelete);
         // assert
         assertTrue(deletedBook.isEmpty());
     }

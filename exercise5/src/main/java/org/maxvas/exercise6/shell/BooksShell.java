@@ -1,25 +1,19 @@
-package org.maxvas.exercise5.shell;
+package org.maxvas.exercise6.shell;
 
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.maxvas.exercise5.dao.BookDao;
-import org.maxvas.exercise5.domain.Book;
-import org.maxvas.exercise5.service.BookService;
+import org.maxvas.exercise6.domain.Book;
+import org.maxvas.exercise6.service.BookService;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @ShellComponent
 @AllArgsConstructor
 public class BooksShell {
 
     private final static String defaultEmpty = null;
-    private final BookDao bookDao;
     private final BookService bookService;
 
     @ShellMethod(value = "Show all books", key = {"all", "a"})
@@ -32,8 +26,8 @@ public class BooksShell {
             @ShellOption String title,
             @ShellOption String author,
             @ShellOption String genre) {
-        UUID bookId = bookService.createBook(title, author, genre);
-        return bookId.toString();
+        Book book = bookService.createBook(title, author, genre);
+        return book.getId().toString();
     }
 
     @ShellMethod(value = "Read book", key = {"read", "r"})
