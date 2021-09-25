@@ -2,23 +2,19 @@ package org.maxvas.exercise6.service;
 
 import org.junit.jupiter.api.Test;
 import org.maxvas.exercise6.domain.Book;
-import org.maxvas.exercise6.repositories.AuthorRepositoryJpa;
+import org.maxvas.exercise6.repositories.AuthorRepository;
 import org.maxvas.exercise6.repositories.BookRepository;
-import org.maxvas.exercise6.repositories.BookRepositoryJpa;
-import org.maxvas.exercise6.repositories.GenreRepositoryJpa;
+import org.maxvas.exercise6.repositories.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@Import({ BookServiceImpl.class, BookRepositoryJpa.class, GenreRepositoryJpa.class, AuthorRepositoryJpa.class})
+@Import(BookServiceImpl.class)
 class BookServiceTest {
 
     @Autowired

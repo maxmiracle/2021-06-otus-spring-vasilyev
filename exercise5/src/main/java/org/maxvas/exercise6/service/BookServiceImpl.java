@@ -37,8 +37,8 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public Optional<Genre> findGenreByName(String name) {
-        var genre = genreRepository.findOneByName(name);
-        return genre;
+        var genre = genreRepository.findByName(name);
+        return Optional.ofNullable(genre);
     }
 
     @Transactional
@@ -52,8 +52,8 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public Optional<Author> findAuthorByName(String name) {
-        var author = authorRepository.findOneByName(name);
-        return author;
+        var author = authorRepository.findByName(name);
+        return Optional.ofNullable(author);
     }
 
     @Transactional
@@ -67,7 +67,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public void update(UUID id, String title, String authorName, String genreName) {
-        Book updatedBook = bookRepository.findOne(id).orElseThrow(() -> new RuntimeException("Error update book with unknown id"));
+        Book updatedBook = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Error update book with unknown id"));
         Genre genre = findGenreByName(genreName).orElseGet(()->newGenre(genreName));
         Author author = findAuthorByName(authorName).orElseGet(()->newAuthor(authorName));
         updatedBook.setTitle(title);
@@ -87,7 +87,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public String bookInfo(UUID id) {
-        Optional<Book> book = bookRepository.findOne(id);
+        Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
             return ToStringBuilder.reflectionToString(book.get(), ToStringStyle.NO_CLASS_NAME_STYLE);
         } else {

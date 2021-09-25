@@ -34,7 +34,7 @@ class ShellTests {
         String newBookId = (String) shell.evaluate(() -> COMMAND_CREATE_BOOK);
         // assert
         UUID bookId = UUID.fromString(newBookId);
-        Optional<Book> book = bookRepository.findOne(bookId);
+        Optional<Book> book = bookRepository.findById(bookId);
         assertTrue(book.isPresent());
         assertEquals("BookTitle1", book.get().getTitle());
     }
@@ -44,11 +44,11 @@ class ShellTests {
         // prepare
         String allBooks = (String) shell.evaluate(() -> SHOW_ALL_BOOKS);
         UUID idBookToDelete = getFirstBookId(allBooks);
-        Optional<Book> book = bookRepository.findOne(idBookToDelete);
+        Optional<Book> book = bookRepository.findById(idBookToDelete);
         assertTrue(book.isPresent());
         // act
         shell.evaluate(() -> String.format(COMMAND_DELETE_BOOK, idBookToDelete));
-        Optional<Book> deletedBook = bookRepository.findOne(idBookToDelete);
+        Optional<Book> deletedBook = bookRepository.findById(idBookToDelete);
         // assert
         assertTrue(deletedBook.isEmpty());
     }

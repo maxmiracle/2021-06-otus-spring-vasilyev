@@ -16,7 +16,6 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import(GenreRepositoryJpa.class)
 class GenreRepositoryTests {
 
     @Autowired
@@ -41,7 +40,7 @@ class GenreRepositoryTests {
         List<Genre> genreList = genreRepository.findAll();
         UUID genreIdToDelete = genreList.get(0).getId();
         genreRepository.delete(genreList.get(0));
-        Optional<Genre> deletedGenre = genreRepository.findOne(genreIdToDelete);
+        Optional<Genre> deletedGenre = genreRepository.findById(genreIdToDelete);
         assertTrue(deletedGenre.isEmpty());
     }
 
@@ -49,8 +48,8 @@ class GenreRepositoryTests {
     void getByName() {
         List<Genre> genreList = genreRepository.findAll();
         String name = genreList.get(0).getName();
-        Optional<Genre> otherGenre = genreRepository.findOneByName(name);
-        assertEquals(genreList.get(0), otherGenre.get());
+        Genre otherGenre = genreRepository.findByName(name);
+        assertEquals(genreList.get(0), otherGenre);
     }
 
     @Test
@@ -60,7 +59,7 @@ class GenreRepositoryTests {
         UUID genreId = genreList.get(0).getId();
         Genre updatedGenre = new Genre(genreId, newName);
         genreRepository.save(updatedGenre);
-        Optional<Genre> newUpdatedGenre = genreRepository.findOne(genreId);
+        Optional<Genre> newUpdatedGenre = genreRepository.findById(genreId);
         assertEquals(newName, newUpdatedGenre.get().getName());
     }
 

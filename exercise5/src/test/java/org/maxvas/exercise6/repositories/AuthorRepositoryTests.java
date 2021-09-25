@@ -15,7 +15,6 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import(AuthorRepositoryJpa.class)
 class AuthorRepositoryTests {
 
     @Autowired
@@ -41,7 +40,7 @@ class AuthorRepositoryTests {
         List<Author> authorList = authorRepository.findAll();
         UUID authorIdToDelete = authorList.get(0).getId();
         authorRepository.delete(authorList.get(0));
-        Optional<Author> deletedAuthor = authorRepository.findOne(authorIdToDelete);
+        Optional<Author> deletedAuthor = authorRepository.findById(authorIdToDelete);
         assertTrue(deletedAuthor.isEmpty());
     }
 
@@ -49,8 +48,8 @@ class AuthorRepositoryTests {
     void getByName() {
         List<Author> authorList = authorRepository.findAll();
         String name = authorList.get(0).getName();
-        Optional<Author> otherAuthor = authorRepository.findOneByName(name);
-        assertEquals(authorList.get(0), otherAuthor.get());
+        Author otherAuthor = authorRepository.findByName(name);
+        assertEquals(authorList.get(0), otherAuthor);
     }
 
     @Test
@@ -60,7 +59,7 @@ class AuthorRepositoryTests {
         UUID authorId = authorList.get(0).getId();
         Author updatedAuthor = new Author(authorId, newName);
         authorRepository.save(updatedAuthor);
-        Optional<Author> newUpdatedAuthor = authorRepository.findOne(authorId);
+        Optional<Author> newUpdatedAuthor = authorRepository.findById(authorId);
         assertEquals(newName, newUpdatedAuthor.get().getName());
     }
 

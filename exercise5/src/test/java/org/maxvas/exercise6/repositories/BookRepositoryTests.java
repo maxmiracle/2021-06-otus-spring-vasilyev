@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@Import({BookRepositoryJpa.class})
 class BookRepositoryTests {
 
     private static int EXPECTED_COUNT_FETCH_ALL = 1;
@@ -41,7 +40,7 @@ class BookRepositoryTests {
 
         Book book = new Book(null, testTitle, newAuthor, newGenre);
         Book book1 = bookRepository.save(book);
-        Optional<Book> savedBook = bookRepository.findOne(book1.getId());
+        Optional<Book> savedBook = bookRepository.findById(book1.getId());
 
         assertTrue(savedBook.isPresent());
         assertEquals(testTitle, savedBook.get().getTitle());
@@ -53,7 +52,7 @@ class BookRepositoryTests {
         List<Book> bookList = bookRepository.findAll();
         UUID bookIdToDelete = bookList.get(0).getId();
         bookRepository.deleteById(bookIdToDelete);
-        Optional<Book> deletedBook = bookRepository.findOne(bookIdToDelete);
+        Optional<Book> deletedBook = bookRepository.findById(bookIdToDelete);
         assertTrue(deletedBook.isEmpty());
     }
 
@@ -61,9 +60,8 @@ class BookRepositoryTests {
     public void getByName() {
         List<Book> bookList = bookRepository.findAll();
         String title = bookList.get(0).getTitle();
-        Optional<Book> otherBook = bookRepository.findOneByTitle(title);
-        assertTrue(otherBook.isPresent());
-        assertEquals(bookList.get(0), otherBook.get());
+        Book otherBook = bookRepository.findByTitle(title);
+        assertEquals(bookList.get(0), otherBook);
     }
 
     @Test
@@ -71,10 +69,10 @@ class BookRepositoryTests {
         String updTitle = "Upd title";
         List<Book> bookList = bookRepository.findAll();
         UUID bookId = bookList.get(0).getId();
-        Book updatedBook = bookRepository.findOne(bookId).get();
+        Book updatedBook = bookRepository.findById(bookId).get();
         updatedBook.setTitle(updTitle);
         bookRepository.save(updatedBook);
-        Optional<Book> newUpdatedBook = bookRepository.findOne(bookId);
+        Optional<Book> newUpdatedBook = bookRepository.findById(bookId);
         assertEquals(updTitle, newUpdatedBook.get().getTitle());
     }
 
