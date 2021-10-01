@@ -1,17 +1,12 @@
-package org.maxvas.exercise6.repositories;
+package org.maxvas.exercise7.repositories;
 
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
-import org.maxvas.exercise6.domain.Author;
-import org.maxvas.exercise6.domain.Book;
-import org.maxvas.exercise6.domain.Genre;
-import org.maxvas.exercise6.service.BookServiceImpl;
+import org.maxvas.exercise7.domain.Author;
+import org.maxvas.exercise7.domain.Book;
+import org.maxvas.exercise7.domain.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,15 +14,13 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DataJpaTest
+@DataMongoTest
 class BookRepositoryTests {
 
-    private static int EXPECTED_COUNT_FETCH_ALL = 1;
+    private static final int EXPECTED_COUNT_FETCH_ALL = 1;
 
     @Autowired
     private BookRepository bookRepository;
-    @Autowired
-    private TestEntityManager entityManager;
 
     @Test
     public void create() {
@@ -35,12 +28,15 @@ class BookRepositoryTests {
         String testTitle = "Title";
         Author newAuthor = new Author(null, "New author");
         Genre newGenre = new Genre(null, "New genre");
-        entityManager.persist(newAuthor);
-        entityManager.persist(newGenre);
+        //entityManager.persist(newAuthor);
+        //entityManager.persist(newGenre);
 
-        Book book = new Book(null, testTitle, newAuthor, newGenre);
+        Book book = new Book(UUID.randomUUID(), testTitle, newAuthor, newGenre);
         Book book1 = bookRepository.save(book);
+
         Optional<Book> savedBook = bookRepository.findById(book1.getId());
+
+        var allData = bookRepository.findAll();
 
         assertTrue(savedBook.isPresent());
         assertEquals(testTitle, savedBook.get().getTitle());
@@ -78,10 +74,8 @@ class BookRepositoryTests {
 
     @Test
     public void findAll() {
-        SessionFactory sessionFactory = entityManager.getEntityManager().getEntityManagerFactory().unwrap(SessionFactory.class);
-        sessionFactory.getStatistics().setStatisticsEnabled(true);
         List<Book> bookList = bookRepository.findAll();
-        assertEquals(EXPECTED_COUNT_FETCH_ALL, sessionFactory.getStatistics().getPrepareStatementCount());
+        assertTrue(bookList.size() >= EXPECTED_COUNT_FETCH_ALL);
     }
 
 }

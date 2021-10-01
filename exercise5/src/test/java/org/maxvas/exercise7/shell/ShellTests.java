@@ -1,11 +1,12 @@
-package org.maxvas.exercise6.shell;
+package org.maxvas.exercise7.shell;
 
+import com.github.cloudyrock.spring.v5.EnableMongock;
 import org.junit.jupiter.api.Test;
-import org.maxvas.exercise6.domain.Book;
-import org.maxvas.exercise6.repositories.BookRepository;
+import org.maxvas.exercise7.domain.Book;
+import org.maxvas.exercise7.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.shell.Shell;
 
 import java.util.Optional;
@@ -16,6 +17,8 @@ import java.util.regex.Pattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@EnableMongock
+@EnableMongoRepositories
 @SpringBootTest
 class ShellTests {
 

@@ -1,29 +1,20 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:bookshelf
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-    data: data.sql
-    schema: schema.sql
-    initialization-mode: always
-
-  h2:
-    console:
-      path: /h2-console
-      settings:
-        web-allow-others: true
-
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-
-    show-sql: true
-    properties:
-      hibernate:
-      #format_sql: true
+  data:
+    mongodb:
+      database: books
+      port: 0
+      host: localhost
 
   shell:
     interactive:
       enabled: false
+
+mongock:
+  runner-type: "ApplicationRunner" # default
+  #runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - org.maxvas.exercise7.mongock.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
