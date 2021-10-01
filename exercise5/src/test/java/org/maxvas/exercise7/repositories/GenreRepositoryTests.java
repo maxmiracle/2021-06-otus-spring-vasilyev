@@ -1,25 +1,21 @@
-package org.maxvas.exercise6.repositories;
+package org.maxvas.exercise7.repositories;
 
+import com.github.cloudyrock.spring.v5.EnableMongock;
 import org.junit.jupiter.api.Test;
-import org.maxvas.exercise6.domain.Genre;
-import org.maxvas.exercise6.domain.Genre;
+import org.maxvas.exercise7.domain.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DataJpaTest
+@EnableMongock
+@DataMongoTest
 class GenreRepositoryTests {
-
-    @Autowired
-    private TestEntityManager em;
 
     @Autowired
     private GenreRepository genreRepository;
@@ -29,7 +25,7 @@ class GenreRepositoryTests {
     void create() {
         long count = genreRepository.count();
         String testName = "Name";
-        Genre genre = new Genre(null, testName);
+        Genre genre = new Genre(UUID.randomUUID(), testName);
         Genre savedGenre = genreRepository.save(genre);
         assertEquals(testName, savedGenre.getName());
         assertEquals(count + 1, genreRepository.count());

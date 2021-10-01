@@ -1,8 +1,8 @@
-package org.maxvas.exercise6.shell;
+package org.maxvas.exercise7.shell;
 
 import lombok.AllArgsConstructor;
-import org.maxvas.exercise6.domain.Book;
-import org.maxvas.exercise6.service.BookService;
+import org.maxvas.exercise7.domain.Book;
+import org.maxvas.exercise7.service.BookService;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
