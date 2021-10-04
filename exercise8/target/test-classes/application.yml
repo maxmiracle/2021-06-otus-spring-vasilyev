@@ -1,0 +1,20 @@
+spring:
+  data:
+    mongodb:
+      database: books
+      port: 0
+      host: localhost
+
+  shell:
+    interactive:
+      enabled: false
+
+mongock:
+  runner-type: "ApplicationRunner" # default
+  #runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - org.maxvas.exercise8.mongock.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
