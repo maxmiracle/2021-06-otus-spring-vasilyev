@@ -12,6 +12,7 @@ import org.maxvas.repositories.GenreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,8 +30,8 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public Book createBook(String title, String authorName, String genreName) {
-        Genre genre = findGenreByName(genreName).orElseGet(()->newGenre(genreName));
-        Author author = findAuthorByName(authorName).orElseGet(()->newAuthor(authorName));
+        Genre genre = findGenreByName(genreName).orElseGet(() -> newGenre(genreName));
+        Author author = findAuthorByName(authorName).orElseGet(() -> newAuthor(authorName));
         return bookRepository.save(new Book(null, title, author, genre));
     }
 
@@ -44,9 +45,9 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public Genre newGenre(String name) {
-            Genre newGenre = new Genre(null, name);
-            Genre genre = genreRepository.save(newGenre);
-            return genre;
+        Genre newGenre = new Genre(null, name);
+        Genre genre = genreRepository.save(newGenre);
+        return genre;
     }
 
     @Transactional(readOnly = true)
@@ -59,17 +60,17 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public Author newAuthor(String name) {
-            Author newAuthor = new Author(null, name);
-            Author author = authorRepository.save(newAuthor);
-            return author;
+        Author newAuthor = new Author(null, name);
+        Author author = authorRepository.save(newAuthor);
+        return author;
     }
 
     @Transactional
     @Override
     public void update(UUID id, String title, String authorName, String genreName) {
         Book updatedBook = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Error update book with unknown id"));
-        Genre genre = findGenreByName(genreName).orElseGet(()->newGenre(genreName));
-        Author author = findAuthorByName(authorName).orElseGet(()->newAuthor(authorName));
+        Genre genre = findGenreByName(genreName).orElseGet(() -> newGenre(genreName));
+        Author author = findAuthorByName(authorName).orElseGet(() -> newAuthor(authorName));
         updatedBook.setTitle(title);
         updatedBook.setAuthor(author);
         updatedBook.setGenre(genre);
@@ -95,9 +96,21 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Book> findById(UUID id) {
+        return bookRepository.findById(id);
+    }
+
     @Transactional
     @Override
     public void deleteById(UUID id) {
         bookRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public List<Book> findAll() {
+        return bookRepository.findAll();
     }
 }
