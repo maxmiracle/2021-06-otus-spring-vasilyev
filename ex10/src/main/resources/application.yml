@@ -5,6 +5,8 @@ spring:
     password:
     driver-class-name: org.h2.Driver
     initialization-mode: always
+    data: classpath:data.sql
+    schema: classpath:schema.sql
 
   h2:
     console:
