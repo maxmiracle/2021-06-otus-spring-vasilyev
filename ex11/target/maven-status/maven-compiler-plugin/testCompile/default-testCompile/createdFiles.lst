@@ -1,0 +1,5 @@
+org\maxvas\exercise\repositories\GenreRepositoryTests.class
+org\maxvas\exercise\repositories\BookRepositoryTests.class
+org\maxvas\exercise\mongock\changelog\DatabaseChangelog.class
+org\maxvas\exercise\repositories\AuthorRepositoryTests.class
+org\maxvas\exercise\service\BookServiceTest.class

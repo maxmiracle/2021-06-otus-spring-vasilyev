@@ -1,0 +1,12 @@
+org\maxvas\exercise\domain\Author.class
+org\maxvas\exercise\service\BookService.class
+org\maxvas\exercise\domain\Genre.class
+org\maxvas\exercise\domain\Book.class
+org\maxvas\exercise\repositories\AuthorRepository.class
+org\maxvas\exercise\MainApplication.class
+org\maxvas\exercise\service\BookServiceImpl.class
+org\maxvas\exercise\mongock\changelog\DatabaseChangelog.class
+org\maxvas\exercise\repositories\GenreRepository.class
+org\maxvas\exercise\repositories\BookRepository.class
+org\maxvas\exercise\domain\Comment.class
+org\maxvas\exercise\repositories\CommentRepository.class
