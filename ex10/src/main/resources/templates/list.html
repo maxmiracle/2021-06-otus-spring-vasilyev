@@ -13,11 +13,12 @@
             padding: 5px;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </head>
 <body>
 <h1>Books:</h1>
 <a th:href="@{/create}" href="create.html">Create new book</a>
-<table class="books">
+<table class="books" id="booksTable">
     <thead>
     <tr>
         <th>ID</th>
@@ -27,21 +28,35 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="book : ${books}">
-        <td th:text="${book.id}">1</td>
-        <td th:text="${book.title}">John Doe</td>
-        <td th:text="${book.author.name}">John Doe</td>
-        <td th:text="${book.genre.name}">John Doe</td>
-        <td>
-            <a th:href="@{/edit(id=${book.id})}" href="edit.html">Edit</a>
-        </td>
-        <td>
-            <form id="edit-form" th:action="@{/delete(id=${book.id})}" th:method="post" th:object="${book}" action="list.html">
-                <a onclick="this.closest('form').submit();return false;" href="list.html">Delete</a>
-            </form>
-        </td>
-    </tr>
     </tbody>
 </table>
+
+ <script>
+     (function() {
+        var restAPI = "/api/book/"
+        $.getJSON( restAPI )
+            .done(function(data) {
+                $.each (data, function( i, item ){
+                    $("<tr>")
+                    .append( $("<td>").append( item.id ) )
+                    .append( $("<td>").append( item.title ) )
+                    .append( $("<td>").append( item.author.name ) )
+                    .append( $("<td>").append( item.genre.name ) )
+                    .append( $("<td>").append( $("<a>")
+                                               .attr( "href", "/edit?id=" + item.id )
+                                               .append( "Edit" )
+                                              ) )
+                    .append( $("<td>").append( $("<a>")
+                                               .append( "Delete" )
+                                               .attr( "href", "/" )
+                                               .click( function(){
+                                                         $.post("/delete?id=" + item.id );
+                                                     })
+                                              ) )
+                    .appendTo("#booksTable > tbody");
+                });
+            });
+     })();
+ </script>
 </body>
 </html>

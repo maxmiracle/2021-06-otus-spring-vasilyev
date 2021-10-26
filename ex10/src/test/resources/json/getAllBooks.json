@@ -1,0 +1,26 @@
+[
+  {
+    "id": "e64d5510-3c9b-4d82-b823-46cbb7f5b962",
+    "title": "Dynamic Composition",
+    "author": {
+      "id": "47a203d8-5851-4ae7-95ab-a0e51538bdba",
+      "name": "Frank Webb"
+    },
+    "genre": {
+      "id": "d7717b6b-2df5-413a-bbb2-fbcfbaaf55c3",
+      "name": "Монография"
+    }
+  },
+  {
+    "id": "3c217d46-52f0-4daf-808a-35962f18c0f5",
+    "title": "Точка и линия на плоскости",
+    "author": {
+      "id": "204f0af6-c7d6-403f-9c6a-601e0068f192",
+      "name": "Василий Кандинский"
+    },
+    "genre": {
+      "id": "d7717b6b-2df5-413a-bbb2-fbcfbaaf55c3",
+      "name": "Монография"
+    }
+  }
+]
