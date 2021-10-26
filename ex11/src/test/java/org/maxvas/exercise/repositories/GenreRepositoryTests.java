@@ -6,15 +6,12 @@ import org.maxvas.exercise.domain.Genre;
 import org.maxvas.exercise.mongock.changelog.DatabaseChangelog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @EnableMongock
 @DataMongoTest
@@ -22,9 +19,6 @@ class GenreRepositoryTests {
 
     @Autowired
     private GenreRepository genreRepository;
-
-    @Autowired
-    private ReactiveMongoTemplate reactiveMongoTemplate;
 
 
     @Test
@@ -52,7 +46,7 @@ class GenreRepositoryTests {
     void update() {
         Genre genre = genreRepository.findById(DatabaseChangelog.genreSciFi.getId()).block();
         Genre newGenre = genre.setName("Novel");
-        Mono<Genre>  savedGenre = genreRepository.save(newGenre);
+        Mono<Genre> savedGenre = genreRepository.save(newGenre);
         StepVerifier
                 .create(savedGenre)
                 .assertNext(genre1 -> assertEquals(newGenre, genre1))

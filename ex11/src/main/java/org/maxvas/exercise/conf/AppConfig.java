@@ -17,7 +17,7 @@ public class AppConfig {
 
     @Bean
     public RouterFunction<ServerResponse> list(
-            @Value("classpath:/books.html") Resource html) {
+            @Value("classpath:/list.html") Resource html) {
         return route(GET("/"), request
                 -> ok().contentType(MediaType.TEXT_HTML).bodyValue(html)
         );

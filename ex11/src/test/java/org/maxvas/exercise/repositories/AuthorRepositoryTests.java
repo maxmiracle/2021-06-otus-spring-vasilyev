@@ -23,9 +23,6 @@ class AuthorRepositoryTests {
     @Autowired
     private AuthorRepository authorRepository;
 
-    @Autowired
-    private ReactiveMongoTemplate reactiveMongoTemplate;
-
 
     @Test
     void create() {

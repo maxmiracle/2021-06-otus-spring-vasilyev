@@ -8,8 +8,8 @@ import org.maxvas.exercise.domain.Genre;
 import org.maxvas.exercise.mongock.changelog.DatabaseChangelog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.UUID;
 
@@ -19,12 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataMongoTest
 class BookRepositoryTests {
 
-
     @Autowired
     private BookRepository bookRepository;
-
-    @Autowired
-    private ReactiveMongoTemplate reactiveMongoTemplate;
 
 
     @Test
@@ -33,27 +29,21 @@ class BookRepositoryTests {
         Author testAuthor = new Author(UUID.randomUUID(), "TestAuthor");
         Genre testGenre = new Genre(UUID.randomUUID(), "TestGenre");
         Book book = new Book(UUID.randomUUID(), testName, testAuthor, testGenre);
-        Book savedBook = bookRepository.save(book).block();
-        UUID id = savedBook.getId();
-        Mono<Book> bookMono = reactiveMongoTemplate.findById(id, Book.class);
-        Book bookActual = bookMono.block();
-        assertEquals(book, bookActual);
+        Mono<Book> savedBook = bookRepository.save(book);
+        StepVerifier.create(savedBook)
+                .assertNext(book1 -> assertEquals(book, book1))
+                .expectComplete()
+                .verify();
     }
 
 
     @Test
     void findByTitle() {
-        Book book = bookRepository.findByTitle(DatabaseChangelog.dynamicComposition.getTitle()).block();
-        assertEquals(DatabaseChangelog.dynamicComposition, book);
+        StepVerifier.create(bookRepository.findByTitle(DatabaseChangelog.dynamicComposition.getTitle()))
+                .assertNext(book -> assertEquals(DatabaseChangelog.dynamicComposition, book))
+                .expectComplete()
+                .verify();
     }
 
-    @Test
-    void update() {
-        Book book = bookRepository.findById(DatabaseChangelog.dotAndLineBook.getId()).block();
-        Book newBook = book.setTitle("СпрингTest");
-        bookRepository.save(newBook).subscribe();
-        Book actualBook = bookRepository.findById(book.getId()).block();
-        assertEquals(newBook, actualBook);
-    }
 
 }
