@@ -1,20 +1,20 @@
 package org.maxvas.exercise.repositories;
 
 import org.maxvas.exercise.domain.Book;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-public interface BookRepository extends CrudRepository<Book, String> {
+public interface BookRepository extends ReactiveCrudRepository<Book, String> {
     //special for exercise
-    Book findByTitle(@Param("title") String title);
+    Mono<Book> findByTitle(@Param("title") String title);
 
-    List<Book> findAll();
+    Flux<Book> findAll();
 
-    Optional<Book> findById(UUID id);
+    Mono<Book> findById(UUID id);
 
-    void deleteById(UUID id);
+    Mono<Void> deleteById(UUID id);
 }

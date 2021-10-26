@@ -1,18 +1,18 @@
 package org.maxvas.exercise.repositories;
 
 import org.maxvas.exercise.domain.Author;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-public interface AuthorRepository extends CrudRepository<Author, String> {
-    Author findByName(String name);
+public interface AuthorRepository extends ReactiveCrudRepository<Author, String> {
+    Mono<Author> findByName(String name);
 
-    List<Author> findAll();
+    Flux<Author> findAll();
 
-    Optional<Author> findById(UUID id);
+    Mono<Author> findById(UUID id);
 
-    void deleteById(UUID id);
+    Mono<Void> deleteById(UUID id);
 }

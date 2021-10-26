@@ -1,8 +1,14 @@
+#spring:
+#  data:
+#    mongodb:
+#      database: books
+#      port: 27017
+#      host: localhost
 spring:
   data:
     mongodb:
       database: books
-      port: 27017
+      port: 0
       host: localhost
 
 mongock:

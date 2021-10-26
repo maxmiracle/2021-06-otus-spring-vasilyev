@@ -1,17 +1,21 @@
 package org.maxvas.exercise.repositories;
 
+import com.github.cloudyrock.spring.v5.EnableMongock;
 import org.junit.jupiter.api.Test;
 import org.maxvas.exercise.domain.Author;
+import org.maxvas.exercise.domain.Author;
+import org.maxvas.exercise.mongock.changelog.DatabaseChangelog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@EnableMongock
 @DataMongoTest
 class AuthorRepositoryTests {
 
@@ -19,42 +23,41 @@ class AuthorRepositoryTests {
     @Autowired
     private AuthorRepository authorRepository;
 
+    @Autowired
+    private ReactiveMongoTemplate reactiveMongoTemplate;
+
 
     @Test
     void create() {
-        long count = authorRepository.count();
-        String testName = "Name";
+        String testName = "TestName";
         Author author = new Author(UUID.randomUUID(), testName);
-        Author savedAuthor = authorRepository.save(author);
-        assertEquals(count + 1, authorRepository.count());
+        Mono<Author> savedAuthor = authorRepository.save(author);
+        StepVerifier.create(savedAuthor)
+                .assertNext(author1 -> assertEquals(author, author1))
+                .expectComplete()
+                .verify();
     }
 
     @Test
-    void delete() {
-        List<Author> authorList = authorRepository.findAll();
-        UUID authorIdToDelete = authorList.get(0).getId();
-        authorRepository.delete(authorList.get(0));
-        Optional<Author> deletedAuthor = authorRepository.findById(authorIdToDelete.toString());
-        assertTrue(deletedAuthor.isEmpty());
-    }
-
-    @Test
-    void getByName() {
-        List<Author> authorList = authorRepository.findAll();
-        String name = authorList.get(0).getName();
-        Author otherAuthor = authorRepository.findByName(name);
-        assertEquals(authorList.get(0), otherAuthor);
+    void findByName() {
+        Mono<Author> author = authorRepository.findByName(DatabaseChangelog.authorWebb.getName());
+        StepVerifier
+                .create(author)
+                .assertNext(author1 -> assertEquals(DatabaseChangelog.authorWebb, author1))
+                .expectComplete()
+                .verify();
     }
 
     @Test
     void update() {
-        String newName = "New Name Author";
-        List<Author> authorList = authorRepository.findAll();
-        UUID authorId = authorList.get(0).getId();
-        Author updatedAuthor = new Author(authorId, newName);
-        authorRepository.save(updatedAuthor);
-        Optional<Author> newUpdatedAuthor = authorRepository.findById(authorId);
-        assertEquals(updatedAuthor, newUpdatedAuthor.get());
+        Author author = authorRepository.findById(DatabaseChangelog.authorKandinsky.getId()).block();
+        Author newAuthor = author.setName("Ян Полак");
+        Mono<Author>  savedAuthor = authorRepository.save(newAuthor);
+        StepVerifier
+                .create(savedAuthor)
+                .assertNext(author1 -> assertEquals(newAuthor, author1))
+                .expectComplete()
+                .verify();
     }
 
 }

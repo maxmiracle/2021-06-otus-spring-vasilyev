@@ -1,18 +1,18 @@
 package org.maxvas.exercise.repositories;
 
 import org.maxvas.exercise.domain.Genre;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-public interface GenreRepository extends CrudRepository<Genre, String> {
-    Genre findByName(String name);
+public interface GenreRepository extends ReactiveCrudRepository<Genre, String> {
+    Mono<Genre> findByName(String name);
 
-    List<Genre> findAll();
+    Flux<Genre> findAll();
 
-    Optional<Genre> findById(UUID id);
+    Mono<Genre> findById(UUID id);
 
-    void deleteById(UUID id);
+    Mono<Void> deleteById(UUID id);
 }

@@ -1,78 +1,59 @@
 package org.maxvas.exercise.repositories;
 
+import com.github.cloudyrock.spring.v5.EnableMongock;
 import org.junit.jupiter.api.Test;
 import org.maxvas.exercise.domain.Author;
 import org.maxvas.exercise.domain.Book;
 import org.maxvas.exercise.domain.Genre;
+import org.maxvas.exercise.mongock.changelog.DatabaseChangelog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@EnableMongock
 @DataMongoTest
 class BookRepositoryTests {
 
-    private static final int EXPECTED_COUNT_FETCH_ALL = 1;
 
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private ReactiveMongoTemplate reactiveMongoTemplate;
+
+
     @Test
-    public void create() {
-        Long count = bookRepository.count();
-        String testTitle = "Title";
-        Author newAuthor = new Author(null, "New author");
-        Genre newGenre = new Genre(null, "New genre");
-        Book book = new Book(UUID.randomUUID(), testTitle, newAuthor, newGenre);
-        Book book1 = bookRepository.save(book);
+    void create() {
+        String testName = "TestName";
+        Author testAuthor = new Author(UUID.randomUUID(), "TestAuthor");
+        Genre testGenre = new Genre(UUID.randomUUID(), "TestGenre");
+        Book book = new Book(UUID.randomUUID(), testName, testAuthor, testGenre);
+        Book savedBook = bookRepository.save(book).block();
+        UUID id = savedBook.getId();
+        Mono<Book> bookMono = reactiveMongoTemplate.findById(id, Book.class);
+        Book bookActual = bookMono.block();
+        assertEquals(book, bookActual);
+    }
 
-        Optional<Book> savedBook = bookRepository.findById(book1.getId());
 
-        var allData = bookRepository.findAll();
-
-        assertTrue(savedBook.isPresent());
-        assertEquals(testTitle, savedBook.get().getTitle());
-        assertEquals(count + 1, bookRepository.count());
+    @Test
+    void findByTitle() {
+        Book book = bookRepository.findByTitle(DatabaseChangelog.dynamicComposition.getTitle()).block();
+        assertEquals(DatabaseChangelog.dynamicComposition, book);
     }
 
     @Test
-    public void delete() {
-        List<Book> bookList = bookRepository.findAll();
-        UUID bookIdToDelete = bookList.get(0).getId();
-        bookRepository.deleteById(bookIdToDelete);
-        Optional<Book> deletedBook = bookRepository.findById(bookIdToDelete);
-        assertTrue(deletedBook.isEmpty());
-    }
-
-    @Test
-    public void getByName() {
-        List<Book> bookList = bookRepository.findAll();
-        String title = bookList.get(0).getTitle();
-        Book otherBook = bookRepository.findByTitle(title);
-        assertEquals(bookList.get(0), otherBook);
-    }
-
-    @Test
-    public void update() {
-        String updTitle = "Upd title";
-        List<Book> bookList = bookRepository.findAll();
-        UUID bookId = bookList.get(0).getId();
-        Book updatedBook = bookRepository.findById(bookId).get();
-        updatedBook.setTitle(updTitle);
-        bookRepository.save(updatedBook);
-        Optional<Book> newUpdatedBook = bookRepository.findById(bookId);
-        assertEquals(updTitle, newUpdatedBook.get().getTitle());
-    }
-
-    @Test
-    public void findAll() {
-        List<Book> bookList = bookRepository.findAll();
-        assertTrue(bookList.size() >= EXPECTED_COUNT_FETCH_ALL);
+    void update() {
+        Book book = bookRepository.findById(DatabaseChangelog.dotAndLineBook.getId()).block();
+        Book newBook = book.setTitle("СпрингTest");
+        bookRepository.save(newBook).subscribe();
+        Book actualBook = bookRepository.findById(book.getId()).block();
+        assertEquals(newBook, actualBook);
     }
 
 }
