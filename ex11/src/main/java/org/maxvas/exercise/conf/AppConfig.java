@@ -17,7 +17,7 @@ public class AppConfig {
 
     @Bean
     public RouterFunction<ServerResponse> list(
-            @Value("classpath:/list.html") Resource html) {
+            @Value("classpath:/static/list.html") Resource html) {
         return route(GET("/"), request
                 -> ok().contentType(MediaType.TEXT_HTML).bodyValue(html)
         );
@@ -25,7 +25,7 @@ public class AppConfig {
 
     @Bean
     public RouterFunction<ServerResponse> edit(
-            @Value("classpath:/edit.html") Resource html) {
+            @Value("classpath:/static//edit.html") Resource html) {
         return route(GET("/edit"), request
                 -> ok().contentType(MediaType.TEXT_HTML).bodyValue(html)
         );
@@ -33,7 +33,7 @@ public class AppConfig {
 
     @Bean
     public RouterFunction<ServerResponse> create(
-            @Value("classpath:/create.html") Resource html) {
+            @Value("classpath:/static//create.html") Resource html) {
         return route(GET("/create"), request
                 -> ok().contentType(MediaType.TEXT_HTML).bodyValue(html)
         );
