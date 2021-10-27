@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input{
+            width: 300px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<body>
+
+<!-- Book edition -->
+<form id="editform"  action="edit.html">
+    <h1>Book Info:</h1>
+
+    <div class="row">
+        <label for="bookId">ID:</label>
+        <input id="bookId" type="text" readonly="readonly" value="1"/>
+    </div>
+
+    <div class="row">
+        <label for="bookTitle">Title:</label>
+        <input id="bookTitle" title="title" type="text"  value="John Doe"/>
+    </div>
+
+    <div class="row">
+        <label for="bookAuthor">Author:</label>
+        <input id="bookAuthor" title="author" type="text"  value="John Doe"/>
+    </div>
+
+    <div class="row">
+        <label for="bookGenre">Genre:</label>
+        <input id="bookGenre" title="genre" type="text"  value="John Doe"/>
+    </div>
+
+    <div class="row">
+        <button id="submitButton" type="submit" value="Submit">Save</button>
+    </div>
+</form>
+<script>
+    function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+    $("#submitButton").click( function() {
+        var data = new Object();
+        data.id = $("#bookId").val();
+        data.title  = $("#bookTitle").val();
+        data.author = new Object();
+        data.author.name = $("#bookAuthor").val();
+        data.genre = new Object();
+        data.genre.name = $("#bookGenre").val();
+        $.ajax({
+            url: '/api/book/' + $("#bookId").val(),
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function(result) {
+               window.location.href = "/";
+            }
+        });
+    });
+    $( document ).ready(function() {
+        var restAPI = "/api/book/" + getUrlParameter('id');
+        $.getJSON( restAPI )
+            .done(function(data) {
+                $("#bookId").val(data.id);
+                $("#bookTitle").val(data.title);
+                $("#bookAuthor").val(data.author.name);
+                $("#bookGenre").val(data.genre.name);
+        });
+    });
+</script>
+</body>
+</html>

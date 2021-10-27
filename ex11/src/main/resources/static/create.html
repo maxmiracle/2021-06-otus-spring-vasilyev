@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Create book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input{
+            width: 300px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<body>
+
+<!-- Book creation -->
+<form id="createform">
+    <h1>New book:</h1>
+
+    <div class="row">
+        <label for="bookTitle">Title:</label>
+        <input id="bookTitle" title="title" type="text"  value=""/>
+    </div>
+
+    <div class="row">
+        <label for="bookAuthor">Author:</label>
+        <input id="bookAuthor" title="author" type="text"  value=""/>
+    </div>
+
+    <div class="row">
+        <label for="bookGenre">Genre:</label>
+        <input id="bookGenre" title="genre" type="text"  value=""/>
+    </div>
+
+    <div class="row">
+        <button id="createButton" type="button" value="Submit">Create</button>
+    </div>
+</form>
+<script>
+    $("#createButton").click( function() {
+        var data = new Object();
+        data.title  = $("#bookTitle").val();
+        data.author = new Object();
+        data.author.name = $("#bookAuthor").val();
+        data.genre = new Object();
+        data.genre.name = $("#bookGenre").val();
+        $.ajax({
+            url: '/api/book/',
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function(result) {
+               window.location.href = "/";
+            }
+        });
+    });
+</script>
+</body>
+</html>
