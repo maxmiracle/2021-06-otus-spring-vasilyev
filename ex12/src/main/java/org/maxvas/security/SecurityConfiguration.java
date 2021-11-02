@@ -20,10 +20,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     UserRepository userRepository;
 
-    @Override
-    public void configure(WebSecurity web) {
-        //web.ignoring().antMatchers( "/" );
-    }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {

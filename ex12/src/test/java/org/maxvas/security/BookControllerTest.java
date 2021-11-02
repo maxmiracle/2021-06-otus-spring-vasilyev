@@ -21,8 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BookControllerTest {
 
     private static final String REDIRECT_LOGIN = "http://localhost/login";
-    private static final String BOOK_ID = "ed2463c6-f4f1-4afb-ab07-947a0929b35f";
-    private static final String SECOND_BOOK_ID = "b7cba70c-379e-11ec-8d3d-0242ac130003";
+    private static final String BOOK_ID = "1";
+    private static final String SECOND_BOOK_ID = "2";
     @Autowired
     private MockMvc mockMvc;
 
@@ -54,7 +54,7 @@ class BookControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user")
+    @WithMockUser(username = "user", roles = {"USER"})
     public void postCreateTest() throws Exception {
         mockMvc.perform(post("/create?id=")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -71,7 +71,7 @@ class BookControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user")
+    @WithMockUser(username = "user", roles = {"USER"})
     public void getEditTest() throws Exception {
         mockMvc.perform(get("/edit?id=" + BOOK_ID))
                 .andExpect(status().isOk());
@@ -84,7 +84,7 @@ class BookControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user")
+    @WithMockUser(username = "user", roles = {"USER"})
     public void postEditTest() throws Exception {
         mockMvc.perform(post("/edit?id=" + BOOK_ID)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -101,7 +101,7 @@ class BookControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user")
+    @WithMockUser(username = "manager", roles ={"ADMIN"})
     public void postDeleteTest() throws Exception {
         mockMvc.perform(post("/delete?id=" + SECOND_BOOK_ID))
                 .andExpect(redirectedUrl("/"));

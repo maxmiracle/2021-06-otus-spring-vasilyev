@@ -11,7 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,7 +47,7 @@ class BookRepositoryTests {
     @Test
     public void delete() {
         List<Book> bookList = bookRepository.findAll();
-        UUID bookIdToDelete = bookList.get(0).getId();
+        Long bookIdToDelete = bookList.get(0).getId();
         bookRepository.deleteById(bookIdToDelete);
         Optional<Book> deletedBook = bookRepository.findById(bookIdToDelete);
         assertTrue(deletedBook.isEmpty());
@@ -65,7 +65,7 @@ class BookRepositoryTests {
     public void update() {
         String updTitle = "Upd title";
         List<Book> bookList = bookRepository.findAll();
-        UUID bookId = bookList.get(0).getId();
+        Long bookId = bookList.get(0).getId();
         Book updatedBook = bookRepository.findById(bookId).get();
         updatedBook.setTitle(updTitle);
         bookRepository.save(updatedBook);

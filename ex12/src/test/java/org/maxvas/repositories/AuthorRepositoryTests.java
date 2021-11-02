@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +36,7 @@ class AuthorRepositoryTests {
     @Test
     void delete() {
         List<Author> authorList = authorRepository.findAll();
-        UUID authorIdToDelete = authorList.get(0).getId();
+        Long authorIdToDelete = authorList.get(0).getId();
         authorRepository.delete(authorList.get(0));
         Optional<Author> deletedAuthor = authorRepository.findById(authorIdToDelete);
         assertTrue(deletedAuthor.isEmpty());
@@ -54,7 +54,7 @@ class AuthorRepositoryTests {
     void update() {
         String newName = "New Name Author";
         List<Author> authorList = authorRepository.findAll();
-        UUID authorId = authorList.get(0).getId();
+        Long authorId = authorList.get(0).getId();
         Author updatedAuthor = new Author(authorId, newName);
         authorRepository.save(updatedAuthor);
         Optional<Author> newUpdatedAuthor = authorRepository.findById(authorId);

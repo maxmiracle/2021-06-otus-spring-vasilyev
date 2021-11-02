@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,7 +35,7 @@ class GenreRepositoryTests {
     @Test
     void delete() {
         List<Genre> genreList = genreRepository.findAll();
-        UUID genreIdToDelete = genreList.get(0).getId();
+        Long genreIdToDelete = genreList.get(0).getId();
         genreRepository.delete(genreList.get(0));
         Optional<Genre> deletedGenre = genreRepository.findById(genreIdToDelete);
         assertTrue(deletedGenre.isEmpty());
@@ -53,7 +53,7 @@ class GenreRepositoryTests {
     void update() {
         String newName = "New Name Genre";
         List<Genre> genreList = genreRepository.findAll();
-        UUID genreId = genreList.get(0).getId();
+        Long genreId = genreList.get(0).getId();
         Genre updatedGenre = new Genre(genreId, newName);
         genreRepository.save(updatedGenre);
         Optional<Genre> newUpdatedGenre = genreRepository.findById(genreId);
