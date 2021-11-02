@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class CustomUserDetails implements UserDetails {
     // only one ROLE per USER.
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return (Collection)List.of(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
     }
 
     @Override

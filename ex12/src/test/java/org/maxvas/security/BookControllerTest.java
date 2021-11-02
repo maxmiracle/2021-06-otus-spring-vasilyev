@@ -101,7 +101,7 @@ class BookControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "manager", roles ={"ADMIN"})
+    @WithMockUser(username = "manager", roles = {"ADMIN"})
     public void postDeleteTest() throws Exception {
         mockMvc.perform(post("/delete?id=" + SECOND_BOOK_ID))
                 .andExpect(redirectedUrl("/"));

@@ -39,22 +39,22 @@ public class BookServiceImpl implements BookService {
     private final MutableAclService mutableAclService;
 
 
-    private void addRights( Book book ) {
+    private void addRights(Book book) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        final Sid owner = new PrincipalSid( authentication );
-        ObjectIdentity oid = new ObjectIdentityImpl( book.getClass(), book.getId() );
-        MutableAcl acl = mutableAclService.createAcl( oid );
-        acl.setOwner( owner );
+        final Sid owner = new PrincipalSid(authentication);
+        ObjectIdentity oid = new ObjectIdentityImpl(book.getClass(), book.getId());
+        MutableAcl acl = mutableAclService.createAcl(oid);
+        acl.setOwner(owner);
         final Sid userRole = new GrantedAuthoritySid("ROLE_USER");
         final Sid adminRole = new GrantedAuthoritySid("ROLE_ADMIN");
         // Для тех, кто имеет роль USER можно редактировать и просматривать.
-        acl.insertAce( acl.getEntries().size(), BasePermission.READ, userRole, true );
-        acl.insertAce( acl.getEntries().size(), BasePermission.WRITE, userRole, true );
-        mutableAclService.updateAcl( acl );
+        acl.insertAce(acl.getEntries().size(), BasePermission.READ, userRole, true);
+        acl.insertAce(acl.getEntries().size(), BasePermission.WRITE, userRole, true);
+        mutableAclService.updateAcl(acl);
         // Роль ADMIN - могут просматривать добавленные записи и удалять.
-        acl.insertAce( acl.getEntries().size(), BasePermission.READ, adminRole, true );
-        acl.insertAce( acl.getEntries().size(), BasePermission.DELETE, adminRole, true );
-        mutableAclService.updateAcl( acl );
+        acl.insertAce(acl.getEntries().size(), BasePermission.READ, adminRole, true);
+        acl.insertAce(acl.getEntries().size(), BasePermission.DELETE, adminRole, true);
+        mutableAclService.updateAcl(acl);
     }
 
     @Transactional
@@ -137,12 +137,11 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
             bookRepository.delete(book.get());
-        }else
-        {
+        } else {
             throw new RuntimeException("Книга с таким номером не найдена.");
         }
     }

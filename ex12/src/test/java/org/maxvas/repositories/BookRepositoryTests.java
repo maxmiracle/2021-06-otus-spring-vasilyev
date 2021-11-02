@@ -12,14 +12,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import java.util.List;
 import java.util.Optional;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 class BookRepositoryTests {
 
-    private static int EXPECTED_COUNT_FETCH_ALL = 1;
+    private static final int EXPECTED_COUNT_FETCH_ALL = 1;
 
     @Autowired
     private BookRepository bookRepository;
