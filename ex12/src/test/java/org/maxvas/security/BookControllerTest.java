@@ -109,7 +109,7 @@ class BookControllerTest {
 
     @Test
     public void postDeleteCantAccessTest() throws Exception {
-        mockMvc.perform(post("/delete?id=" + SECOND_BOOK_ID))
+        mockMvc.perform(post("/delete?id=" + BOOK_ID))
                 .andExpect(redirectedUrl(REDIRECT_LOGIN));
     }
 

@@ -12,9 +12,12 @@ INSERT INTO USER(ID, USERNAME, PASSWORD, ROLE) VALUES
 (3, 'user', '$2a$12$ac9gF7d6TRmFVgNarhpqfOjSoTZFb2C.cJYdBldf8Go8ngDNHUVkG', 'USER');--pass=user
 
 INSERT INTO acl_sid (id, principal, sid) VALUES
-(1, 0, 'ROLE_ADMIN'),
-(2, 0, 'ROLE_USER'),
-(3, 0, 'ROLE_SOMEONE');
+(1, 1, 'junior'),
+(2, 1, 'manager'),
+(3, 1, 'user'),
+(4, 0, 'ROLE_ADMIN'),
+(5, 0, 'ROLE_USER'),
+(6, 0, 'ROLE_SOMEONE');
 
 INSERT INTO acl_class (id, class) VALUES
 (1, 'org.maxvas.domain.Book'), --Используем только этот класс для security demo
@@ -30,17 +33,10 @@ INSERT INTO acl_object_identity (id, object_id_class, object_id_identity, parent
 
 -- Mask
 -- READ = 1
--- WRITE  2
--- CREATE 4 - не используется
--- DELETE 8
+-- остальные не используются
 INSERT INTO acl_entry (id, acl_object_identity, ace_order, sid, mask,  granting, audit_success, audit_failure) VALUES
-                      (1,   1,                  1,          2,    1,    1, 1, 1),   --Грант USER for book1
-                      (2,   1,                  2,          2,    2,    1, 1, 1),   --Грант USER for book1
-                      (3,   1,                  3,          2,    8,    1, 1, 1),   --Грант USER for book1
-                      (4,   2,                  4,          2,    1,    1, 1, 1),   --Грант USER for book2
-                      (5,   2,                  5,          2,    2,    1, 1, 1),   --Грант USER for book2
-                      (6,   2,                  6,          2,    8,    1, 1, 1),   --Грант USER for book2
-                      (7,   1,                  7,          1,    1,    1, 1, 1),   --Грант ADMIN for book1
-                      (8,   1,                  8,          1,    8,    1, 1, 1),   --Грант ADMIN for book1
-                      (9,   2,                  9,          1,    1,    1, 1, 1),   --Грант ADMIN for book2
-                      (10,  2,                 10,          1,    8,    1, 1, 1);   --Грант ADMIN for book2
+                      (1,   1,                  1,          5,    1,    1, 1, 1),   --Грант USER for book1
+                      (2,   2,                  2,          5,    1,    1, 1, 1),   --Грант USER for book2
+                      (3,   1,                  3,          4,    1,    1, 1, 1),   --Грант ADMIN for book1
+                      (4,   2,                  4,          4,    1,    1, 1, 1),   --Грант ADMIN for book2
+                      (5,   1,                  5,          1,    1,    1, 1, 1);   --Грант junior read book1

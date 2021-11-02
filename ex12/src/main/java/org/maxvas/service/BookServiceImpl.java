@@ -7,7 +7,6 @@ import org.maxvas.domain.Author;
 import org.maxvas.domain.Book;
 import org.maxvas.domain.Genre;
 import org.maxvas.repositories.AuthorRepository;
-import org.maxvas.repositories.BookRepository;
 import org.maxvas.repositories.GenreRepository;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.domain.GrantedAuthoritySid;
@@ -30,7 +29,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    private final BookRepository bookRepository;
+    private final BookRepositoryAccessService bookRepositoryAccessService;
 
     private final GenreRepository genreRepository;
 
@@ -49,11 +48,9 @@ public class BookServiceImpl implements BookService {
         final Sid adminRole = new GrantedAuthoritySid("ROLE_ADMIN");
         // Для тех, кто имеет роль USER можно редактировать и просматривать.
         acl.insertAce(acl.getEntries().size(), BasePermission.READ, userRole, true);
-        acl.insertAce(acl.getEntries().size(), BasePermission.WRITE, userRole, true);
         mutableAclService.updateAcl(acl);
         // Роль ADMIN - могут просматривать добавленные записи и удалять.
         acl.insertAce(acl.getEntries().size(), BasePermission.READ, adminRole, true);
-        acl.insertAce(acl.getEntries().size(), BasePermission.DELETE, adminRole, true);
         mutableAclService.updateAcl(acl);
     }
 
@@ -62,7 +59,7 @@ public class BookServiceImpl implements BookService {
     public Book createBook(String title, String authorName, String genreName) {
         Genre genre = findGenreByName(genreName).orElseGet(() -> newGenre(genreName));
         Author author = findAuthorByName(authorName).orElseGet(() -> newAuthor(authorName));
-        Book book = bookRepository.save(new Book(null, title, author, genre));
+        Book book = bookRepositoryAccessService.save(new Book(null, title, author, genre));
         addRights(book);
         return book;
     }
@@ -100,19 +97,19 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public void update(Long id, String title, String authorName, String genreName) {
-        Book updatedBook = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Error update book with unknown id"));
+        Book updatedBook = bookRepositoryAccessService.getById(id);
         Genre genre = findGenreByName(genreName).orElseGet(() -> newGenre(genreName));
         Author author = findAuthorByName(authorName).orElseGet(() -> newAuthor(authorName));
         updatedBook.setTitle(title);
         updatedBook.setAuthor(author);
         updatedBook.setGenre(genre);
-        bookRepository.save(updatedBook);
+        bookRepositoryAccessService.save(updatedBook);
     }
 
     @Transactional(readOnly = true)
     @Override
     public String allBooksInfo() {
-        return bookRepository.findAll().stream()
+        return bookRepositoryAccessService.findAll().stream()
                 .map(book -> ToStringBuilder.reflectionToString(book, ToStringStyle.NO_CLASS_NAME_STYLE))
                 .collect(Collectors.joining(",\n"));
     }
@@ -120,36 +117,28 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public String bookInfo(Long id) {
-        Optional<Book> book = bookRepository.findById(id);
-        if (book.isPresent()) {
-            return ToStringBuilder.reflectionToString(book.get(), ToStringStyle.NO_CLASS_NAME_STYLE);
-        } else {
-            return "Book not found";
-        }
+        Book book = bookRepositoryAccessService.getById(id);
+        return ToStringBuilder.reflectionToString(book, ToStringStyle.NO_CLASS_NAME_STYLE);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
-    public Optional<Book> findById(Long id) {
-        return bookRepository.findById(id);
+    public Book getById(Long id) {
+        return bookRepositoryAccessService.getById(id);
     }
 
 
     @Transactional
     @Override
     public void deleteById(Long id) {
-        Optional<Book> book = bookRepository.findById(id);
-        if (book.isPresent()) {
-            bookRepository.delete(book.get());
-        } else {
-            throw new RuntimeException("Книга с таким номером не найдена.");
-        }
+        Book book = bookRepositoryAccessService.getById(id);
+        bookRepositoryAccessService.delete(book);
     }
 
 
     @Transactional
     @Override
     public List<Book> findAll() {
-        return bookRepository.findAll();
+        return bookRepositoryAccessService.findAll();
     }
 }

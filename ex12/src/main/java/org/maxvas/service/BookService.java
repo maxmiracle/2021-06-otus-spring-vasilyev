@@ -25,7 +25,7 @@ public interface BookService {
 
     String bookInfo(Long id);
 
-    Optional<Book> findById(Long id);
+    Book getById(Long id);
 
     void deleteById(Long id);
 
