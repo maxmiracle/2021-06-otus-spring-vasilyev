@@ -1,6 +1,5 @@
 package org.maxvas;
 
-import org.h2.tools.Console;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,7 +10,7 @@ public class Application {
 
         SpringApplication.run(Application.class, args);
 
-        Console.main(args);
+        //Console.main(args);
     }
 
 }

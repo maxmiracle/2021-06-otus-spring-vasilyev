@@ -17,6 +17,8 @@
 
     <properties>
         <java.version>11</java.version>
+        <ehcache-core.version>2.6.11</ehcache-core.version>
+        <swagger.version>2.8.0</swagger.version>
     </properties>
     <dependencies>
         <dependency>
@@ -39,11 +41,27 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <!-- Spring Security -->
+        <!-- Spring Security starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!-- Spring Security ACL и зависимости-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-acl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-core</artifactId>
+            <version>${ehcache-core.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>com.h2database</groupId>
@@ -69,6 +87,18 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

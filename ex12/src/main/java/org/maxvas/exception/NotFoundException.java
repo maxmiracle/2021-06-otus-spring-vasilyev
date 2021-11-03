@@ -1,4 +1,4 @@
 package org.maxvas.exception;
 
-public class NotFoundException extends RuntimeException{
+public class NotFoundException extends RuntimeException {
 }

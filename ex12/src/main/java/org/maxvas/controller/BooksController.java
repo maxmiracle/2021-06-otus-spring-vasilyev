@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.maxvas.domain.Author;
 import org.maxvas.domain.Book;
 import org.maxvas.domain.Genre;
-import org.maxvas.exception.NotFoundException;
 import org.maxvas.service.BookService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @Controller
 @AllArgsConstructor
@@ -36,10 +35,10 @@ public class BooksController {
 
     @GetMapping("/edit")
     public String get(
-            @RequestParam(value = "id") UUID id,
+            @RequestParam(value = "id") Long id,
             Model model
     ) {
-        Book book = bookService.findById(id).orElseThrow(NotFoundException::new);
+        Book book = bookService.getById(id);
         model.addAttribute("book", book);
         return "edit";
     }
@@ -54,7 +53,7 @@ public class BooksController {
 
     @PostMapping("/delete")
     public String delete(
-            @RequestParam(value = "id") UUID id) {
+            @RequestParam(value = "id") Long id) {
         bookService.deleteById(id);
         return "redirect:/";
     }

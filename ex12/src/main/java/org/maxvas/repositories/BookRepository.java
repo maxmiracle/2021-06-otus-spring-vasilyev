@@ -7,14 +7,23 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.UUID;
 
-public interface BookRepository extends JpaRepository<Book, UUID> {
-    //special for exercise
+
+public interface BookRepository extends JpaRepository<Book, Long> {
+
     @Query("select b from Book b where b.title = :title")
     Book findByTitle(@Param("title") String title);
 
+    @Override
+    Book getById(Long id);
+
     //eager load author, genre entities
-    @EntityGraph(attributePaths = { "author", "genre" })
+    @EntityGraph(attributePaths = {"author", "genre"})
     List<Book> findAll();
+
+    @Override
+    void delete(Book book);
+
+    @Override
+    Book save(Book book);
 }

@@ -6,7 +6,7 @@ import org.maxvas.domain.Genre;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 public interface BookService {
     Book createBook(String title, String authorName, String genreName);
@@ -19,15 +19,15 @@ public interface BookService {
 
     Author newAuthor(String name);
 
-    void update(UUID id, String title, String authorName, String genreName);
+    void update(Long id, String title, String authorName, String genreName);
 
     String allBooksInfo();
 
-    String bookInfo(UUID id);
+    String bookInfo(Long id);
 
-    Optional<Book> findById(UUID id);
+    Book getById(Long id);
 
-    void deleteById(UUID id);
+    void deleteById(Long id);
 
     List<Book> findAll();
 }
