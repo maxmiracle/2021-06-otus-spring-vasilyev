@@ -5,6 +5,8 @@ import org.maxvas.batchnews.domain.ArticleDto;
 import org.maxvas.batchnews.entity.Article;
 import org.maxvas.batchnews.processor.ArticleProcessor;
 import org.maxvas.batchnews.reader.TheGuaridianNewsItemReader;
+import org.maxvas.batchnews.service.ListArticlesService;
+import org.maxvas.batchnews.service.TheGuardianArticleService;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
@@ -42,11 +44,10 @@ public class ArticleJobConfig {
 
     @StepScope
     @Bean
-    public TheGuaridianNewsItemReader itemReader(@Value("#{jobParameters['" + START_DATE_PARAM + "']}") String startDateParam,
-                                                 @Value("#{jobParameters['" + END_DATE_PARAM + "']}") String endDateParam) {
+    public TheGuaridianNewsItemReader itemReader(@Value("#{jobParameters['" + START_DATE_PARAM + "']}") String startDateParam, @Value("#{jobParameters['" + END_DATE_PARAM + "']}") String endDateParam, ListArticlesService listArticlesService, TheGuardianArticleService theGuardianArticleService) {
         LocalDate startDate = LocalDate.parse(startDateParam, DateTimeFormatter.ISO_LOCAL_DATE);
         LocalDate endDate = LocalDate.parse(endDateParam, DateTimeFormatter.ISO_LOCAL_DATE);
-        return new TheGuaridianNewsItemReader(startDate, endDate);
+        return new TheGuaridianNewsItemReader(startDate, endDate, listArticlesService, theGuardianArticleService);
     }
 
     @StepScope
@@ -67,34 +68,22 @@ public class ArticleJobConfig {
 
     @Bean
     public Job importTheGuardianArticlesJob(Step transformArticleStep, Step finalStep) {
-        return jobBuilderFactory.get(IMPORT_THE_GUARDIAN_ARTICLES_JOB)
-                .incrementer(new RunIdIncrementer())
-                .flow(transformArticleStep)
-                .end()
-                .listener(new JobExecutionListener() {
-                    @Override
-                    public void beforeJob(@NonNull JobExecution jobExecution) {
-                        log.info("Старт загрузки статей");
-                    }
+        return jobBuilderFactory.get(IMPORT_THE_GUARDIAN_ARTICLES_JOB).incrementer(new RunIdIncrementer()).flow(transformArticleStep).end().listener(new JobExecutionListener() {
+            @Override
+            public void beforeJob(@NonNull JobExecution jobExecution) {
+                log.info("Старт загрузки статей");
+            }
 
-                    @Override
-                    public void afterJob(@NonNull JobExecution jobExecution) {
-                        log.info("Конец загрузки статей");
-                    }
-                })
-                .build();
+            @Override
+            public void afterJob(@NonNull JobExecution jobExecution) {
+                log.info("Конец загрузки статей");
+            }
+        }).build();
     }
 
     @Bean
-    public Step transformArticleStep(TheGuaridianNewsItemReader itemReader,
-                                     ArticleProcessor itemProcessor,
-                                     MongoItemWriter<Article> itemWriter) {
-        return stepBuilderFactory.get("transformArticleStep")
-                .<ArticleDto, Article>chunk(CHUNK_SIZE)
-                .reader(itemReader)
-                .processor(itemProcessor)
-                .writer(itemWriter)
-                .build();
+    public Step transformArticleStep(TheGuaridianNewsItemReader itemReader, ArticleProcessor itemProcessor, MongoItemWriter<Article> itemWriter) {
+        return stepBuilderFactory.get("transformArticleStep").<ArticleDto, Article>chunk(CHUNK_SIZE).reader(itemReader).processor(itemProcessor).writer(itemWriter).build();
     }
 
 }

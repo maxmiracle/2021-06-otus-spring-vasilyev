@@ -21,3 +21,7 @@ spring:
 app:
   start-date: 2020-01-01
   end-date: 2020-01-02
+
+retry:
+  maxAttempts: 3
+  maxDelay: 10000

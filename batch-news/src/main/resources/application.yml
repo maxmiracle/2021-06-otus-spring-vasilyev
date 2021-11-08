@@ -1,5 +1,6 @@
 spring:
   batch:
+    initialize-schema: always
     job:
       enabled: false
   shell:
@@ -7,10 +8,12 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:./batchnews
     driverClassName: org.h2.Driver
     username: sa
     password:
+    #initialization-mode: always
+    #schema: classpath:org/springframework/batch/core/schema-h2.sql
 
   h2:
     console:
@@ -24,7 +27,11 @@ spring:
       database: newsChartsDb
 
 app:
-  start-date: 2020-01-01
-  end-date: 2020-12-31
+  start-date: 2020-02-01
+  end-date: 2020-03-28
+
+retry:
+  maxAttempts: 3
+  maxDelay: 10000
 
 #debug: true

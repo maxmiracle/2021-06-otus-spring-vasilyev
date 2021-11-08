@@ -12,6 +12,7 @@ public class ArticleProcessor implements ItemProcessor<ArticleDto, Article> {
 
     private final String dataSource;
     private LocalDate processingDate;
+
     public ArticleProcessor(String dataSource) {
         this.dataSource = dataSource;
     }
@@ -26,11 +27,6 @@ public class ArticleProcessor implements ItemProcessor<ArticleDto, Article> {
         if (!articleDto.getSuccess()) {
             return null;
         }
-        return new Article(articleDto.getDate(),
-                articleDto.getLink(),
-                articleDto.getTitle(),
-                articleDto.getText(),
-                processingDate,
-                dataSource);
+        return new Article(articleDto.getDate(), articleDto.getLink(), articleDto.getTitle(), articleDto.getText(), processingDate, dataSource);
     }
 }

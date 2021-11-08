@@ -33,14 +33,9 @@ class ImportTheGuardianArticlesJobTest {
     void testJob() throws Exception {
 
         Job job = jobLauncherTestUtils.getJob();
-        assertThat(job).isNotNull()
-                .extracting(Job::getName)
-                .isEqualTo(ArticleJobConfig.IMPORT_THE_GUARDIAN_ARTICLES_JOB);
+        assertThat(job).isNotNull().extracting(Job::getName).isEqualTo(ArticleJobConfig.IMPORT_THE_GUARDIAN_ARTICLES_JOB);
 
-        JobParameters parameters = new JobParametersBuilder()
-                .addString(ArticleJobConfig.START_DATE_PARAM, "2020-01-01")
-                .addString(ArticleJobConfig.END_DATE_PARAM, "2020-01-02")
-                .toJobParameters();
+        JobParameters parameters = new JobParametersBuilder().addString(ArticleJobConfig.START_DATE_PARAM, "2020-01-01").addString(ArticleJobConfig.END_DATE_PARAM, "2020-01-02").toJobParameters();
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(parameters);
 
         assertThat(jobExecution.getExitStatus().getExitCode()).isEqualTo("COMPLETED");
