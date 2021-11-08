@@ -25,9 +25,9 @@ public class DocumentService {
      * @return Document
      * @throws RuntimeException
      */
-    public Document getUrl(String url) throws RuntimeException {
+    public Document getDocument(String url) throws RuntimeException {
         try {
-            return documentServiceInternal.getUrlRetryInternal(url);
+            return documentServiceInternal.getDocumentRetryInternal(url);
         } catch (IOException exception) {
             throw new RuntimeException(String.format("Error getUrl %s", url), exception);
         }

@@ -32,7 +32,7 @@ public class TheGuardianArticleService {
         String text = null;
         try {
             String url = articleLink.getLink();
-            Document doc = documentService.getUrl(url);
+            Document doc = documentService.getDocument(url);
             title = doc.select("h1").first().html();
             Elements elements = doc.select("div.article-body-commercial-selector");
             Element element = elements.first();

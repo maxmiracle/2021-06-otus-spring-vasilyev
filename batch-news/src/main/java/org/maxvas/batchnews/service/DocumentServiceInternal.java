@@ -17,7 +17,7 @@ import java.io.IOException;
 public class DocumentServiceInternal {
 
     @Retryable(value = IOException.class, maxAttemptsExpression = "${retry.maxAttempts}", backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
-    public Document getUrlRetryInternal(String url) throws IOException {
+    public Document getDocumentRetryInternal(String url) throws IOException {
         return Jsoup.connect(url).get();
     }
 }

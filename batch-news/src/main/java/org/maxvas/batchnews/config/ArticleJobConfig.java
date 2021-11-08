@@ -44,7 +44,11 @@ public class ArticleJobConfig {
 
     @StepScope
     @Bean
-    public TheGuaridianNewsItemReader itemReader(@Value("#{jobParameters['" + START_DATE_PARAM + "']}") String startDateParam, @Value("#{jobParameters['" + END_DATE_PARAM + "']}") String endDateParam, ListArticlesService listArticlesService, TheGuardianArticleService theGuardianArticleService) {
+    public TheGuaridianNewsItemReader itemReader(
+            @Value("#{jobParameters['" + START_DATE_PARAM + "']}") String startDateParam,
+            @Value("#{jobParameters['" + END_DATE_PARAM + "']}") String endDateParam,
+            ListArticlesService listArticlesService,
+            TheGuardianArticleService theGuardianArticleService) {
         LocalDate startDate = LocalDate.parse(startDateParam, DateTimeFormatter.ISO_LOCAL_DATE);
         LocalDate endDate = LocalDate.parse(endDateParam, DateTimeFormatter.ISO_LOCAL_DATE);
         return new TheGuaridianNewsItemReader(startDate, endDate, listArticlesService, theGuardianArticleService);
@@ -68,7 +72,11 @@ public class ArticleJobConfig {
 
     @Bean
     public Job importTheGuardianArticlesJob(Step transformArticleStep) {
-        return jobBuilderFactory.get(IMPORT_THE_GUARDIAN_ARTICLES_JOB).incrementer(new RunIdIncrementer()).flow(transformArticleStep).end().listener(new JobExecutionListener() {
+        return jobBuilderFactory.get(IMPORT_THE_GUARDIAN_ARTICLES_JOB)
+                .incrementer(new RunIdIncrementer())
+                .flow(transformArticleStep)
+                .end()
+                .listener(new JobExecutionListener() {
             @Override
             public void beforeJob(@NonNull JobExecution jobExecution) {
                 log.info("Старт загрузки статей");
@@ -83,7 +91,12 @@ public class ArticleJobConfig {
 
     @Bean
     public Step transformArticleStep(TheGuaridianNewsItemReader itemReader, ArticleProcessor itemProcessor, MongoItemWriter<Article> itemWriter) {
-        return stepBuilderFactory.get("transformArticleStep").<ArticleDto, Article>chunk(CHUNK_SIZE).reader(itemReader).processor(itemProcessor).writer(itemWriter).build();
+        return stepBuilderFactory
+                .get("transformArticleStep")
+                .<ArticleDto, Article>chunk(CHUNK_SIZE)
+                .reader(itemReader)
+                .processor(itemProcessor)
+                .writer(itemWriter).build();
     }
 
 }

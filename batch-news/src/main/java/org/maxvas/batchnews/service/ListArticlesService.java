@@ -74,7 +74,7 @@ public class ListArticlesService {
      */
     public List<String> getLinksByDate(LocalDate date) {
         String url = getUrlAllByDate(date);
-        Document doc = documentService.getUrl(url);
+        Document doc = documentService.getDocument(url);
         Elements newLinks = doc.select("a.u-faux-block-link__overlay");
         return newLinks.stream().map(link -> link.absUrl("href")).collect(Collectors.toList());
     }
