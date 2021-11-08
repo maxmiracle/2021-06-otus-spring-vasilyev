@@ -27,7 +27,7 @@ spring:
       database: newsChartsDb
 
 app:
-  start-date: 2020-02-01
+  start-date: 2020-03-27
   end-date: 2020-03-28
 
 retry:

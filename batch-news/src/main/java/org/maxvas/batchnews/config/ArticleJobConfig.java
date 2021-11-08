@@ -67,7 +67,7 @@ public class ArticleJobConfig {
 
 
     @Bean
-    public Job importTheGuardianArticlesJob(Step transformArticleStep, Step finalStep) {
+    public Job importTheGuardianArticlesJob(Step transformArticleStep) {
         return jobBuilderFactory.get(IMPORT_THE_GUARDIAN_ARTICLES_JOB).incrementer(new RunIdIncrementer()).flow(transformArticleStep).end().listener(new JobExecutionListener() {
             @Override
             public void beforeJob(@NonNull JobExecution jobExecution) {

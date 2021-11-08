@@ -24,7 +24,7 @@ public class ArticleProcessor implements ItemProcessor<ArticleDto, Article> {
 
     @Override
     public Article process(ArticleDto articleDto) throws Exception {
-        if (!articleDto.getSuccess()) {
+        if (!articleDto.isSuccess()) {
             return null;
         }
         return new Article(articleDto.getDate(), articleDto.getLink(), articleDto.getTitle(), articleDto.getText(), processingDate, dataSource);

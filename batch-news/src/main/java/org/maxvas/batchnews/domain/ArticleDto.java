@@ -34,7 +34,7 @@ public class ArticleDto {
     /**
      * Статус загрузки статьи из интернета.
      */
-    private Boolean success;
+    private boolean isSuccess;
 
     /**
      * Описание ошибки.

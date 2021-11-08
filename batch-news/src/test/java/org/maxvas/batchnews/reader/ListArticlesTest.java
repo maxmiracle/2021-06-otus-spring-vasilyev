@@ -69,7 +69,7 @@ class ListArticlesTest {
         log.info("Articles number: {}", articleItems.size());
         articleItems.forEach(articleLink -> {
             var data = theGuardianArticleService.getArticleData(articleLink);
-            log.info("Data link {} loaded. Size {}", data.getLink(), data.getSuccess() ? data.getText().length() : data.getError());
+            log.info("Data link {} loaded. Size {}", data.getLink(), data.isSuccess() ? data.getText().length() : data.getError());
         });
     }
 
