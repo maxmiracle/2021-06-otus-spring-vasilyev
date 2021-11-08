@@ -59,7 +59,7 @@ public class ArticleJobConfig {
     @StepScope
     @Bean
     public MongoItemWriter<Article> itemWriter() {
-        MongoItemWriter<Article> writer = new MongoItemWriter<Article>();
+        MongoItemWriter<Article> writer = new MongoItemWriter<>();
         writer.setTemplate(mongoTemplate);
         writer.setCollection("articles");
         return writer;
