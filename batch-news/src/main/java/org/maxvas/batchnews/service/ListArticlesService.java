@@ -2,6 +2,7 @@ package org.maxvas.batchnews.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.maxvas.batchnews.domain.ArticleLink;
@@ -12,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -87,7 +89,23 @@ public class ListArticlesService {
      * @return List of article links to download.
      */
     public List<ArticleLink> getLinksByRange(LocalDate startDate, LocalDate endDate) {
-        return startDate.datesUntil(endDate).flatMap(date -> getLinksByDate(date).stream()).distinct().map(link -> new ArticleLink(getDateFromLink(link), link)).sorted(Comparator.comparing((ArticleLink a) -> a.getDate()).thenComparing(a -> a.getLink())).collect(Collectors.toList());
+        return startDate.datesUntil(endDate)
+                .flatMap(date -> getLinksByDate(date).stream())
+                .distinct()
+                .map(
+                        link -> {
+                            try{
+                                return new ArticleLink(getDateFromLink(link), link);
+                            }
+                            catch (Exception ex) {
+                                log.warn("Get date from link error. Skip link: {},\n Error: {}", link, ExceptionUtils.getStackTrace(ex));
+                                return null;
+                            }
+                        })
+                .filter(Objects::nonNull)
+                .sorted(Comparator.comparing((ArticleLink a) -> a.getDate())
+                        .thenComparing(a -> a.getLink())).collect(Collectors.toList());
     }
+
 
 }
