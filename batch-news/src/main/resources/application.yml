@@ -22,13 +22,14 @@ spring:
 
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: newsChartsDb
+      uri: mongodb+srv://user:password@newslogic.z0a6l.mongodb.net/newsChartsDb?retryWrites=true&w=majority
+      #host: localhost
+      #port: 27017
+      #database: newsChartsDb
 
 app:
-  start-date: 2020-03-27
-  end-date: 2020-03-28
+  start-date: 2013-01-01
+  end-date: 2021-11-09
 
 retry:
   maxAttempts: 3
